@@ -44,13 +44,18 @@ extension View {
 }
 
 enum Layout {
-    static let panel = CGSize(width: 270, height: 260)
-    static let px: CGFloat = 3
+    static let panel = CGSize(width: 300, height: 500)
+    static let bubbleWidth: CGFloat = 268
+    /// How far the middle of the buddy's head sits above the bottom edge of the panel.
+    static let headAboveBottom: CGFloat = 93
+    static let rowHeight: CGFloat = 40
+    static let visibleRows = 5
 }
 
 struct BuddyRoot: View {
     @ObservedObject var store: SessionStore
     @ObservedObject var ui: BuddyUI
+    @ObservedObject var engine: BehaviorEngine
     weak var host: PanelHost?
 
     private var showBubble: Bool {
@@ -61,11 +66,11 @@ struct BuddyRoot: View {
         VStack(spacing: 6) {
             Spacer(minLength: 0)
             if showBubble {
-                Bubble(store: store, ui: ui)
+                Bubble(store: store, ui: ui, engine: engine)
                     .hitRegion()
                     .transition(.scale(scale: 0.85, anchor: .bottom).combined(with: .opacity))
             }
-            MascotView(store: store, ui: ui, host: host)
+            MascotView(store: store, ui: ui, engine: engine, host: host)
                 .hitRegion()
         }
         .padding(.bottom, 4)
@@ -84,40 +89,33 @@ struct BuddyRoot: View {
 struct MascotView: View {
     @ObservedObject var store: SessionStore
     @ObservedObject var ui: BuddyUI
+    let engine: BehaviorEngine
     weak var host: PanelHost?
-    @StateObject private var clock = MascotClock()
     @State private var dragging = false
     @State private var pressStart: NSPoint?
 
     var body: some View {
-        let frame = clock.frame
-            ?? MascotFrame.make(t: Date().timeIntervalSinceReferenceDate, store: store, nudgedAt: ui.nudgedAt)
-        VStack(spacing: 1) {
-            MascotSprite(frame: frame, badge: store.alerts.count)
-                .equatable()
-            NameTag(mood: frame.mood)
-                .equatable()
-        }
-        .onAppear { clock.start(store: store, ui: ui) }
-        .contentShape(Rectangle())
-        .gesture(
-            DragGesture(minimumDistance: 0, coordinateSpace: .global)
-                .onChanged { _ in
-                    let m = NSEvent.mouseLocation
-                    if pressStart == nil { pressStart = m }
-                    if let s = pressStart, !dragging, hypot(m.x - s.x, m.y - s.y) > 3 { dragging = true }
-                    if dragging { host?.dragChanged() }
-                }
-                .onEnded { _ in
-                    if dragging { host?.dragEnded() } else { tap() }
-                    dragging = false
-                    pressStart = nil
-                }
-        )
-        .contextMenu { BuddyMenu(store: store, ui: ui) }
+        LiveMascot(screen: engine.screen, badge: store.alerts.count)
+            .contentShape(Rectangle())
+            .gesture(
+                DragGesture(minimumDistance: 0, coordinateSpace: .global)
+                    .onChanged { _ in
+                        let m = NSEvent.mouseLocation
+                        if pressStart == nil { pressStart = m }
+                        if let s = pressStart, !dragging, hypot(m.x - s.x, m.y - s.y) > 3 { dragging = true }
+                        if dragging { host?.dragChanged() }
+                    }
+                    .onEnded { _ in
+                        if dragging { host?.dragEnded() } else { tap() }
+                        dragging = false
+                        pressStart = nil
+                    }
+            )
+            .contextMenu { BuddyMenu(store: store, ui: ui, engine: engine) }
     }
 
     private func tap() {
+        engine.poke()
         if let next = store.alerts.sorted(by: { $0.kind == .blocked && $1.kind != .blocked }).first {
             Activator.focus(next.session)
             store.acknowledge(next)
@@ -127,117 +125,49 @@ struct MascotView: View {
     }
 }
 
-/// Works out the buddy's frame 12×/s but only publishes when it changes, so SwiftUI does no work
-/// at all between changes; calm states move in whole sprite pixels and change a few times a second.
-@MainActor
-final class MascotClock: ObservableObject {
-    @Published private(set) var frame: MascotFrame?
-    private var timer: Timer?
-
-    func start(store: SessionStore, ui: BuddyUI) {
-        guard timer == nil else { return }
-        let tick = { [weak self, weak store, weak ui] in
-            guard let self, let store, let ui else { return }
-            let next = MascotFrame.make(t: Date().timeIntervalSinceReferenceDate, store: store, nudgedAt: ui.nudgedAt)
-            if next != self.frame { self.frame = next }
-        }
-        tick()
-        let t = Timer(timeInterval: 1.0 / 12, repeats: true) { _ in MainActor.assumeIsolated { tick() } }
-        t.tolerance = 0.01
-        RunLoop.main.add(t, forMode: .common)
-        timer = t
-    }
-}
-
-/// One drawn frame of the buddy: cached sprite bitmap in its mood colour, the smooth extras,
-/// ground shadow and count badge. A mood change cross-fades the colour.
-struct MascotSprite: View, Equatable {
-    let frame: MascotFrame
+/// The live buddy with its name tag. SwiftUI only redraws this when the mood, label or extras
+/// change; the robot itself repaints on its own.
+private struct LiveMascot: View {
+    @ObservedObject var screen: FrameBox
     let badge: Int
 
     var body: some View {
-        ZStack(alignment: .bottom) {
-            Ellipse()
-                .fill(RadialGradient(colors: [.black.opacity(0.16), .black.opacity(0)], center: .center,
-                                     startRadius: 0, endRadius: 30))
-                .frame(width: 60 - frame.lift * 1.4, height: 8)
-            ZStack {
-                Image(nsImage: SpriteCache.image(frame.pose, frame.mood))
-                    .interpolation(.none)
-                    .id(frame.mood)
-                    .transition(.opacity)
-            }
-            .background(MoodEffects(mood: frame.mood, layer: .behind))
-            .overlay(MoodEffects(mood: frame.mood, layer: .front))
-            .scaleEffect(x: frame.squash, y: 2 - frame.squash, anchor: .bottom)
-            .offset(y: -frame.lift - 3)
-            .overlay(alignment: .topTrailing) {
-                Badge(count: badge, color: frame.mood.accent).offset(x: -8, y: 12 - frame.lift)
-            }
-        }
-        .frame(width: CGFloat(Sprite.width + Sprite.margin * 2) * Layout.px,
-               height: CGFloat(Sprite.height + Sprite.headroom) * Layout.px + 6)
-        .animation(.easeInOut(duration: 0.45), value: frame.mood)
-    }
-}
-
-/// Renders each distinct pose once; after that a frame is just a bitmap swap.
-@MainActor
-enum SpriteCache {
-    private static var images: [String: NSImage] = [:]
-
-    static func image(_ pose: Pose, _ mood: Mood) -> NSImage {
-        let key = "\(mood.rawValue)|\(pose)"
-        if let hit = images[key] { return hit }
-        let r = ImageRenderer(content: PixelBuddy(pose: pose, palette: mood.palette, px: Layout.px))
-        r.scale = NSScreen.screens.map(\.backingScaleFactor).max() ?? 2
-        let img = r.nsImage ?? NSImage()
-        if images.count > 300 { images.removeAll() }
-        images[key] = img
-        return img
-    }
-}
-
-/// Picks the buddy's pose and motion for a moment in time.
-struct MascotFrame: Equatable {
-    var mood = Mood.idle
-    var pose = Pose()
-    var lift: CGFloat = 0
-    var squash: CGFloat = 1
-
-    @MainActor
-    static func make(t: Double, store: SessionStore, nudgedAt: Date) -> MascotFrame {
-        var f = MascotFrame()
-        f.mood = store.mood
-        let blinking = t.truncatingRemainder(dividingBy: 4.3) < 0.2
-        let sinceNudge = Date().timeIntervalSince(nudgedAt)
-        let blocked = store.alerts.contains { $0.kind == .blocked }
-
-        if !store.alerts.isEmpty {
-            let wave = Int(t * (blocked ? 5 : 3)) % 2 == 0
-            f.pose.face = blocked ? (blinking ? .blink : .alarmed) : .happy
-            f.pose.left = wave ? .up : .wave
-            f.pose.right = blocked ? (wave ? .wave : .up) : .down
-            if sinceNudge < 1.8 {
-                // Three soft hops that shrink, with a little squish on each landing.
-                let phase = sinceNudge / 0.6
-                let hop = abs(sin(phase * .pi))
-                f.lift = (CGFloat(hop * 10 * (1 - sinceNudge / 1.8)) / 2).rounded() * 2
-                f.squash = hop < 0.15 ? 1.06 : 1
+        let s = screen.status
+        VStack(spacing: 1) {
+            if Snapshot.isRendering {
+                // ImageRenderer cannot draw an AppKit view, so snapshots get the still version.
+                MascotSprite(frame: screen.frame, badge: badge, look: screen.look)
             } else {
-                f.lift = abs(sin(t * 2.5)) > 0.5 ? Layout.px : 0
+                LiveRobot(box: screen)
+                    .frame(width: RobotArt.size.width, height: RobotArt.size.height)
+                    .mascotExtras(s, badge: badge)
             }
-        } else if store.sessions.contains(where: \.isBusy) {
-            f.pose.face = blinking ? .blink : .open(glance: true)
-            f.lift = Int(t * 1.6) % 2 == 0 ? Layout.px : 0
-        } else if store.sessions.isEmpty {
-            f.pose.face = .sleep
-            f.lift = Int(t * 0.8) % 2 == 0 ? Layout.px : 0
-        } else {
-            f.pose.face = blinking ? .blink : .open(glance: false)
-            f.lift = Int(t * 1.1) % 2 == 0 ? Layout.px : 0
+            NameTag(mood: s.mood, label: s.label, name: screen.look.name)
         }
-        return f
+    }
+}
+
+/// One still frame of the buddy with its extras, for snapshots.
+struct MascotSprite: View {
+    let frame: MascotFrame
+    let badge: Int
+    var look = Look.cozy
+
+    var body: some View {
+        RobotCanvas(frame: frame, look: look)
+            .mascotExtras(MascotStatus(mood: frame.mood, label: frame.label, fx: frame.fx, alert: frame.alert),
+                          badge: badge)
+    }
+}
+
+private extension View {
+    /// The glow behind, the floating extras in front, and the count badge by the ear.
+    func mascotExtras(_ s: MascotStatus, badge: Int) -> some View {
+        background(MoodEffects(fx: s.fx, mood: s.mood, glow: s.alert, layer: .behind))
+            .overlay(MoodEffects(fx: s.fx, mood: s.mood, glow: s.alert, layer: .front))
+            .overlay(alignment: .topTrailing) {
+                Badge(count: badge, color: s.mood.accent).offset(x: -22, y: RobotArt.headTop - 10)
+            }
     }
 }
 
@@ -263,99 +193,144 @@ struct Badge: View {
 struct Bubble: View {
     @ObservedObject var store: SessionStore
     @ObservedObject var ui: BuddyUI
+    @ObservedObject var engine: BehaviorEngine
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             header
-                .padding(.horizontal, 12).padding(.top, 9).padding(.bottom, 5)
+                .padding(.horizontal, 12).padding(.top, 10).padding(.bottom, 7)
+            sessionsHeader
+                .padding(.horizontal, 12).padding(.bottom, 5)
             TimelineView(.periodic(from: .now, by: 20)) { _ in
-                VStack(spacing: 2) {
-                    if store.alerts.isEmpty {
-                        if store.sessions.isEmpty {
-                            Text("No Claude sessions running.")
-                                .font(.system(size: 11)).foregroundStyle(.secondary)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .padding(.horizontal, 12).padding(.bottom, 4)
-                        }
-                        ForEach(store.sessions.prefix(5)) { s in
-                            SessionRow(dot: dotColor(s), title: s.project, detail: statusText(s),
-                                       age: s.statusUpdatedAt) { Activator.focus(s) }
-                        }
-                    } else {
-                        ForEach(store.alerts.prefix(4)) { a in
-                            SessionRow(dot: a.kind == .blocked ? Mood.needsYou.accent : Mood.done.accent,
-                                       title: a.title, detail: a.detail, age: a.session.statusUpdatedAt,
-                                       onDismiss: { store.acknowledge(a) }) {
-                                Activator.focus(a.session)
-                                store.acknowledge(a)
-                            }
-                        }
-                        if store.alerts.count > 4 {
-                            Text("+\(store.alerts.count - 4) more")
-                                .font(.system(size: 10)).foregroundStyle(.secondary)
-                                .padding(.leading, 12)
-                        }
-                    }
-                }
-                .padding(.horizontal, 4).padding(.bottom, 8)
+                sessionList
             }
+            // 8 of breathing room, plus the 8 the tail takes at the bottom of the shape.
+            .padding(.bottom, 16)
         }
-        .frame(width: 226)
+        .frame(width: Layout.bubbleWidth)
         .background(BubbleShape().fill(Color(nsColor: .windowBackgroundColor)))
         .overlay(BubbleShape().stroke(Color.primary.opacity(0.12), lineWidth: 1))
         .compositingGroup()
-        .shadow(color: .black.opacity(0.12), radius: 12, y: 4)
+        .shadow(color: .black.opacity(0.14), radius: 12, y: 4)
         .padding(.bottom, 4)
     }
 
     private var header: some View {
-        HStack {
+        HStack(spacing: 6) {
+            Circle().fill(engine.current.mood.accent).frame(width: 7, height: 7)
             Text(headline)
-                .font(.system(size: 11, weight: .semibold, design: .rounded))
-                .foregroundStyle(.secondary)
-            Spacer()
+                .font(.system(size: 11.5, weight: .semibold, design: .rounded))
+                .foregroundStyle(Color.primary.opacity(0.85))
+                .lineLimit(1)
+            Spacer(minLength: 4)
             if store.alerts.count > 1 {
                 Button("Clear all") { store.acknowledgeAll() }
                     .buttonStyle(.plain)
                     .font(.system(size: 10, weight: .medium))
                     .foregroundStyle(.secondary)
+            } else {
+                Text(engine.pinned == nil ? "AUTO" : "PINNED")
+                    .font(.system(size: 8.5, weight: .bold, design: .rounded))
+                    .foregroundStyle(.secondary)
+                    .padding(.horizontal, 5).padding(.vertical, 2)
+                    .background(Capsule().fill(Color.primary.opacity(0.06)))
             }
         }
     }
 
+    /// What the buddy is doing, and for which session when a session is the reason.
     private var headline: String {
-        let n = store.alerts.count
-        if n == 1 { return "1 session needs you" }
-        if n > 1 { return "\(n) sessions need you" }
+        let who = store.focusSession.map { " · \($0.name)" } ?? ""
+        switch engine.current {
+        case .needsYou: return "Needs you" + who
+        case .yourTurn: return "Your turn" + who
+        default:
+            let base = "\(Buddy.name) is \(engine.current.label)"
+            return engine.pinned == nil && engine.current.mood == .working ? base + who : base
+        }
+    }
+
+    private var sessionsHeader: some View {
+        HStack {
+            Text(store.sessions.count == 1 ? "1 SESSION" : "\(store.sessions.count) SESSIONS")
+                .font(.system(size: 9, weight: .bold, design: .rounded))
+                .foregroundStyle(.secondary)
+            Spacer()
+            Text(summary)
+                .font(.system(size: 9.5, weight: .medium, design: .rounded))
+                .foregroundStyle(.tertiary)
+                .lineLimit(1)
+        }
+    }
+
+    private var summary: String {
+        let blocked = store.alerts.filter { $0.kind == .blocked }.count
+        let done = store.alerts.count - blocked
         let busy = store.sessions.filter(\.isBusy).count
-        if busy > 0 { return busy == 1 ? "Claude is working…" : "\(busy) sessions working…" }
-        return store.sessions.isEmpty ? "Sleeping… zzz" : "All quiet"
+        let parts = [(blocked, "need you"), (done, "your turn"), (busy, "working")]
+            .filter { $0.0 > 0 }.map { "\($0.0) \($0.1)" }
+        return parts.isEmpty && !store.sessions.isEmpty ? "all quiet" : parts.joined(separator: " · ")
     }
 
-    private func dotColor(_ s: ClaudeSession) -> Color {
-        s.isBlocked ? Mood.needsYou.accent : s.isBusy ? Mood.working.accent : Mood.idle.accent.opacity(0.6)
+    @ViewBuilder
+    private var sessionList: some View {
+        let rows = store.ordered
+        if rows.isEmpty {
+            Text("No Claude sessions running.")
+                .font(.system(size: 11)).foregroundStyle(.secondary)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal, 12).padding(.bottom, 2)
+        } else {
+            let shown = min(rows.count, Layout.visibleRows)
+            let list = VStack(spacing: 3) {
+                ForEach(rows) { s in row(s) }
+            }
+            .padding(.horizontal, 6)
+            // A sliver of the next row peeks out when there is more to scroll to.
+            let height = CGFloat(shown) * (Layout.rowHeight + 3) - 3 + (rows.count > shown ? 16 : 0)
+            if Snapshot.isRendering {
+                // ImageRenderer cannot draw a scroll view.
+                list.frame(height: height, alignment: .top).clipped()
+            } else {
+                ScrollView(.vertical, showsIndicators: rows.count > shown) { list }
+                    .frame(height: height)
+            }
+        }
     }
 
-    private func statusText(_ s: ClaudeSession) -> String {
-        if s.isBlocked { return "Needs your answer" }
-        return s.isBusy ? "Working…" : "Idle"
+    private func row(_ s: ClaudeSession) -> some View {
+        let alert = store.alert(for: s)
+        let color: Color = alert.map { $0.kind == .blocked ? Mood.needsYou.accent : Mood.done.accent }
+            ?? (s.isBusy ? Mood.working.accent : Color.secondary.opacity(0.45))
+        return SessionRow(dot: color, pulsing: s.isBusy, title: s.name,
+                          detail: "\(store.activity(s)) · \(store.hostName(s))",
+                          age: s.statusUpdatedAt,
+                          ring: s.id == store.focusSession?.id ? color : nil,
+                          onDismiss: alert.map { a in { store.acknowledge(a) } }) {
+            Activator.focus(s)
+            if let alert { store.acknowledge(alert) }
+        }
+        .help(s.cwd)
     }
 }
 
 struct SessionRow: View {
     let dot: Color
+    var pulsing = false
     let title: String
     let detail: String
     let age: Date
+    var ring: Color? = nil
     var onDismiss: (() -> Void)? = nil
     let action: () -> Void
 
     var body: some View {
         HStack(alignment: .center, spacing: 8) {
-            Circle().fill(dot).frame(width: 8, height: 8)
+            StatusDot(color: dot, pulsing: pulsing)
+                .id(pulsing)
             VStack(alignment: .leading, spacing: 1) {
                 Text(title).font(.system(size: 12, weight: .semibold, design: .rounded)).lineLimit(1)
-                Text(detail).font(.system(size: 10.5, design: .rounded)).foregroundStyle(.secondary).lineLimit(2)
+                Text(detail).font(.system(size: 10.5, design: .rounded)).foregroundStyle(.secondary).lineLimit(1)
             }
             Spacer(minLength: 4)
             Text(Self.ago(age)).font(.system(size: 10).monospacedDigit()).foregroundStyle(.tertiary)
@@ -367,8 +342,11 @@ struct SessionRow: View {
                 .buttonStyle(.plain)
             }
         }
-        .padding(.horizontal, 8).padding(.vertical, 6)
+        .padding(.horizontal, 8)
+        .frame(height: Layout.rowHeight)
         .background(RoundedRectangle(cornerRadius: 10, style: .continuous).fill(Color.primary.opacity(0.04)))
+        .overlay(RoundedRectangle(cornerRadius: 10, style: .continuous)
+            .stroke(ring ?? .clear, lineWidth: 1.5).padding(0.75))
         .contentShape(Rectangle())
         .onTapGesture(perform: action)
     }
@@ -379,6 +357,26 @@ struct SessionRow: View {
         if s < 3600 { return "\(Int(s / 60))m" }
         if s < 86400 { return "\(Int(s / 3600))h" }
         return "\(Int(s / 86400))d"
+    }
+}
+
+/// A status dot that sends out a soft ring while its session is working.
+struct StatusDot: View {
+    let color: Color
+    let pulsing: Bool
+    @State private var out = false
+
+    var body: some View {
+        Circle().fill(color).frame(width: 8, height: 8)
+            .background(
+                Circle().stroke(color, lineWidth: 1.5)
+                    .scaleEffect(out ? 2.2 : 1)
+                    .opacity(pulsing ? (out ? 0 : 0.8) : 0)
+            )
+            .onAppear {
+                guard pulsing, !Snapshot.isRendering else { return }
+                withAnimation(.easeOut(duration: 1.2).repeatForever(autoreverses: false)) { out = true }
+            }
     }
 }
 
@@ -401,19 +399,35 @@ struct BubbleShape: Shape {
 struct BuddyMenu: View {
     @ObservedObject var store: SessionStore
     @ObservedObject var ui: BuddyUI
+    @ObservedObject var engine: BehaviorEngine
 
     var body: some View {
         if store.sessions.isEmpty {
             Text("No Claude sessions")
         } else {
-            ForEach(store.sessions) { s in
-                Button("\(s.isBlocked ? "●" : s.isBusy ? "◐" : "○")  \(s.project)") { Activator.focus(s) }
+            ForEach(store.ordered) { s in
+                Button("\(s.isBlocked ? "●" : s.isBusy ? "◐" : "○")  \(s.name)") { Activator.focus(s) }
             }
         }
         Divider()
         if !store.alerts.isEmpty {
             Button("Dismiss all") { store.acknowledgeAll() }
         }
+        // Choosing the pet and what it does lives here, to keep the bubble small.
+        Picker("Pet", selection: Binding(get: { engine.screen.look }, set: { engine.screen.look = $0 })) {
+            ForEach(Look.allCases) { look in
+                Text(look.name).tag(look)
+            }
+        }
+        Picker("Behaviour", selection: $engine.pinned) {
+            Text("Auto (follows your sessions)").tag(Behavior?.none)
+            Divider()
+            ForEach(Behavior.pickable) { b in
+                Text(b.title).tag(Behavior?.some(b))
+            }
+        }
+        Toggle("Stroll when idle", isOn: $engine.strollWhenIdle)
+        Divider()
         Toggle("Sound", isOn: $store.soundOn)
         Picker("Remind me", selection: $store.remindEvery) {
             Text("Off").tag(0.0)

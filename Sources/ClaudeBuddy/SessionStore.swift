@@ -36,7 +36,7 @@ struct SessionAlert: Identifiable, Equatable {
             if let w = session.waitingFor, !w.isEmpty, w != "dialog open" { return "Needs you: \(w)" }
             return "Needs your answer"
         case .done:
-            return "All done, your turn"
+            return "Finished, your turn"
         }
     }
 }
@@ -47,6 +47,8 @@ final class SessionStore: ObservableObject {
     @Published private(set) var alerts: [SessionAlert] = []
     /// Bumped whenever the buddy should hop and get your attention.
     @Published private(set) var nudge = 0
+    /// Bumped whenever a session appears, leaves or changes status, so the buddy can react.
+    private(set) var changeSerial = 0
     @Published var soundOn: Bool = UserDefaults.standard.object(forKey: "soundOn") as? Bool ?? true {
         didSet { UserDefaults.standard.set(soundOn, forKey: "soundOn") }
     }
@@ -67,7 +69,10 @@ final class SessionStore: ObservableObject {
     private var lastReminder = Date()
     private var timer: Timer?
     private var cache: [URL: (Date, ClaudeSession?)] = [:]
-    private var demo: [SessionAlert]?
+    private var demo: [ClaudeSession]?
+    private var demoClock = 0
+    private var statuses: [String: String] = [:]
+    private var hosts: [String: String] = [:]
 
     func start() {
         scan()
@@ -76,19 +81,55 @@ final class SessionStore: ObservableObject {
         }
     }
 
-    /// Fake alerts for `--demo`, so the UI can be seen without a real waiting session.
-    func startDemo() {
-        let now = Date()
-        func s(_ n: String, _ st: String, _ w: String? = nil) -> ClaudeSession {
-            ClaudeSession(pid: 0, sessionId: n, name: n, cwd: "/tmp/\(n)", status: st, waitingFor: w,
-                          entrypoint: "cli", startedAt: now, statusUpdatedAt: now)
+    /// Fake sessions for `--demo`, so the UI can be seen without real ones. When `animated`, they
+    /// change state on a 70-second loop: alerts, everyone working, all quiet, then nothing running.
+    func startDemo(animated: Bool = true) {
+        demo = []
+        demoClock = 0
+        demoStep(quiet: !animated)
+        guard animated else { return }
+        timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
+            MainActor.assumeIsolated {
+                guard let self else { return }
+                self.demoClock = (self.demoClock + 1) % 70
+                self.demoStep()
+            }
         }
-        let a = [SessionAlert(session: s("Alpha USA", "waiting", "Bash(npm run build)"), kind: .blocked),
-                 SessionAlert(session: s("Practise 2", "idle"), kind: .done)]
-        demo = a
-        sessions = a.map(\.session) + [s("Allendale", "busy")]
-        alerts = a
-        nudge += 1
+    }
+
+    private func demoStep(quiet: Bool = false) {
+        let now = Date()
+        func set(_ n: String, _ st: String, _ w: String? = nil, editor: Bool = true, age: TimeInterval = 0) {
+            let old = demo?.first { $0.sessionId == n }
+            if let old, old.status == st, old.waitingFor == w { return }
+            let s = ClaudeSession(pid: 0, sessionId: n, name: n, cwd: "/tmp/\(n)", status: st, waitingFor: w,
+                                  entrypoint: editor ? "claude-vscode" : "cli",
+                                  startedAt: old?.startedAt ?? now.addingTimeInterval(Double(demo?.count ?? 0)),
+                                  statusUpdatedAt: now.addingTimeInterval(-age))
+            if let i = demo?.firstIndex(where: { $0.sessionId == n }) { demo?[i] = s } else { demo?.append(s) }
+        }
+        switch demoClock {
+        case 0:
+            set("Alpha USA", "waiting", "Bash(npm run build)")
+            set("Practise 2", "idle", editor: false)
+            set("Allendale", "busy")
+            set("Darkroom", "idle", age: 6 * 3600)
+            set("Wela", "busy", editor: false)
+        case 12: set("Alpha USA", "busy")
+        case 16: set("Practise 2", "busy", editor: false)
+        case 28: set("Allendale", "idle")
+        case 34: set("Wela", "idle", editor: false)
+        case 40:
+            set("Allendale", "busy")
+            set("Wela", "busy", editor: false)
+        case 44: set("Alpha USA", "waiting", "Edit(src/app.tsx)")
+        case 52:
+            for s in demo ?? [] { set(s.sessionId, "idle", editor: s.entrypoint == "claude-vscode") }
+        case 62: demo = []
+        default: break
+        }
+        ingest(demo ?? [], quiet: quiet || demoClock == 52)
+        if demoClock == 52 { acknowledgeAll() }
     }
 
     func acknowledge(_ alert: SessionAlert) {
@@ -120,6 +161,17 @@ final class SessionStore: ObservableObject {
         }
         cache = cache.filter { files.contains($0.key) }
         live.sort { $0.startedAt < $1.startedAt }
+        ingest(live, quiet: quiet)
+    }
+
+    /// Works out which sessions are waiting for you, and chimes for the new ones.
+    private func ingest(_ live: [ClaudeSession], quiet: Bool) {
+        let seen = Dictionary(live.map { ($0.id, $0.status) }, uniquingKeysWith: { a, _ in a })
+        if seen != statuses {
+            statuses = seen
+            changeSerial += 1
+            hosts = hosts.filter { seen[$0.key] != nil }
+        }
 
         var newAlerts: [SessionAlert] = []
         var fresh: [SessionAlert] = []
@@ -143,6 +195,7 @@ final class SessionStore: ObservableObject {
             fresh.append(alert)
         }
         known.formIntersection(live.map(\.id))
+        acknowledged.formIntersection(live.map(\.id))
 
         if sessions != live { sessions = live }
         if alerts != newAlerts { alerts = newAlerts }
@@ -161,6 +214,43 @@ final class SessionStore: ObservableObject {
         if !alerts.isEmpty { return .done }
         if sessions.contains(where: \.isBusy) { return .working }
         return sessions.isEmpty ? .asleep : .idle
+    }
+
+    /// Every live session, most urgent first: needs you, your turn, working, then idle.
+    var ordered: [ClaudeSession] {
+        func rank(_ s: ClaudeSession) -> Int {
+            if let a = alert(for: s) { return a.kind == .blocked ? 0 : 1 }
+            return s.isBusy ? 2 : 3
+        }
+        return sessions.sorted {
+            let (a, b) = (rank($0), rank($1))
+            return a != b ? a < b : $0.statusUpdatedAt > $1.statusUpdatedAt
+        }
+    }
+
+    /// The session the buddy is reacting to right now.
+    var focusSession: ClaudeSession? {
+        guard let first = ordered.first else { return nil }
+        return alert(for: first) != nil || first.isBusy ? first : nil
+    }
+
+    func alert(for s: ClaudeSession) -> SessionAlert? { alerts.first { $0.id == s.id } }
+
+    /// What a session is doing, in a few words.
+    func activity(_ s: ClaudeSession) -> String {
+        if let a = alert(for: s) { return a.detail }
+        if s.isBlocked { return "Waiting for your answer" }
+        return s.isBusy ? "Working…" : "Idle"
+    }
+
+    /// The app a session runs in ("Code", "Terminal"…), looked up once per session.
+    func hostName(_ s: ClaudeSession) -> String {
+        if let hit = hosts[s.id] { return hit }
+        let name = s.pid > 0
+            ? Activator.hostApp(of: s.pid)?.localizedName ?? (s.entrypoint == "claude-vscode" ? "VS Code" : "Terminal")
+            : (s.entrypoint == "claude-vscode" ? "VS Code" : "Terminal")
+        hosts[s.id] = name
+        return name
     }
 
     /// Plain-text summary for `ClaudeBuddy --status`.

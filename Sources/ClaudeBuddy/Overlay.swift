@@ -35,19 +35,34 @@ final class OverlayController: PanelHost {
     let panel = OverlayPanel(size: Layout.panel)
     let store: SessionStore
     let ui: BuddyUI
+    let engine: BehaviorEngine
 
+    /// Where you parked the buddy. It strolls a little either side of this and always comes back.
+    private var home = CGPoint.zero
+    private var walkOffset: CGFloat = 0
     private var regions: [CGRect] = []
     private var mouseTimer: Timer?
     private var dragOffset: CGPoint?
     private var hoverWork: DispatchWorkItem?
     private var bag: Set<AnyCancellable> = []
 
-    init(store: SessionStore, ui: BuddyUI) {
+    init(store: SessionStore, ui: BuddyUI, engine: BehaviorEngine) {
         self.store = store
         self.ui = ui
-        panel.contentView = FirstClickHostingView(rootView: BuddyRoot(store: store, ui: ui, host: self))
+        self.engine = engine
+        panel.contentView = FirstClickHostingView(rootView: BuddyRoot(store: store, ui: ui, engine: engine, host: self))
         panel.ignoresMouseEvents = true
         restorePosition()
+
+        engine.onWalk = { [weak self] x in
+            guard let self, self.dragOffset == nil else { return }
+            self.walkOffset = x
+            self.panel.setFrameOrigin(NSPoint(x: self.home.x + x, y: self.home.y))
+        }
+        engine.headCenter = { [weak self] in
+            guard let f = self?.panel.frame else { return nil }
+            return CGPoint(x: f.midX, y: f.minY + Layout.headAboveBottom)
+        }
 
         // Polling the cursor 10×/s is far cheaper than a global monitor, which wakes us on every
         // mouse movement anywhere on screen.
@@ -76,15 +91,21 @@ final class OverlayController: PanelHost {
         let m = NSEvent.mouseLocation
         if dragOffset == nil {
             dragOffset = CGPoint(x: m.x - panel.frame.minX, y: m.y - panel.frame.minY)
+            // Picked up mid-stroll: wherever it is put down becomes home.
+            walkOffset = 0
+            engine.resetWalk()
+            engine.setHeld(true)
         }
         guard let o = dragOffset else { return }
-        panel.setFrameOrigin(NSPoint(x: m.x - o.x, y: m.y - o.y))
+        home = CGPoint(x: m.x - o.x, y: m.y - o.y)
+        panel.setFrameOrigin(home)
     }
 
     func dragEnded() {
         dragOffset = nil
+        engine.setHeld(false)
         keepOnScreen()
-        UserDefaults.standard.set(NSStringFromPoint(panel.frame.origin), forKey: "origin")
+        UserDefaults.standard.set(NSStringFromPoint(home), forKey: "origin")
     }
 
     // MARK: Click-through + hover
@@ -116,23 +137,29 @@ final class OverlayController: PanelHost {
     // MARK: Position
 
     private func restorePosition() {
-        if let s = UserDefaults.standard.string(forKey: "origin") {
-            panel.setFrameOrigin(NSPointFromString(s))
+        if let saved = UserDefaults.standard.string(forKey: "origin") {
+            home = NSPointFromString(saved)
         } else if let vf = NSScreen.main?.visibleFrame {
-            panel.setFrameOrigin(NSPoint(x: vf.maxX - Layout.panel.width - 12, y: vf.minY + 12))
+            home = CGPoint(x: vf.maxX - Layout.panel.width - 12, y: vf.minY + 12)
         }
         keepOnScreen()
     }
 
-    /// Keeps the buddy itself (the bottom of the panel) on a visible screen.
+    /// Keeps the buddy itself (the bottom of the panel) on a visible screen, and tells it how far
+    /// it may stroll either side of home without leaving that screen.
     private func keepOnScreen() {
-        let f = panel.frame
-        let buddy = CGRect(x: f.midX - 60, y: f.minY, width: 120, height: 170)
+        let size = panel.frame.size
+        let buddy = CGRect(x: home.x + size.width / 2 - 60, y: home.y, width: 120, height: 170)
         let screen = NSScreen.screens.first { $0.visibleFrame.intersects(buddy) } ?? NSScreen.main
         guard let vf = screen?.visibleFrame else { return }
-        var o = f.origin
-        o.x = min(max(o.x, vf.minX - (f.width - 120) / 2), vf.maxX - f.width + (f.width - 120) / 2)
-        o.y = min(max(o.y, vf.minY), vf.maxY - 170)
-        if o != f.origin { panel.setFrameOrigin(o) }
+        let slack = (size.width - 120) / 2
+        home.x = min(max(home.x, vf.minX - slack), vf.maxX - size.width + slack)
+        home.y = min(max(home.y, vf.minY), vf.maxY - 170)
+
+        let center = home.x + size.width / 2
+        engine.walkRange = max(-110, min(0, vf.minX + 60 - center))...min(110, max(0, vf.maxX - 60 - center))
+        walkOffset = min(max(walkOffset, engine.walkRange.lowerBound), engine.walkRange.upperBound)
+        let origin = NSPoint(x: home.x + walkOffset, y: home.y)
+        if origin != panel.frame.origin { panel.setFrameOrigin(origin) }
     }
 }
