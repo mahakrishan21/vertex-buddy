@@ -1,0 +1,2 @@
+codec_name=h264 codec_type=video width=1920 height=1080 pix_fmt=yuv420p r_frame_rate=30/1 nb_frames=1650 codec_name=aac codec_type=audio sample_rate=48000 channels=2 r_frame_rate=0/0 nb_frames=2580 duration=55.100000 size=40637201 bit_rate=5900138 
+ I: -15.1 LUFS  LRA: 3.2 LU  Peak: -1.5 dBFS 

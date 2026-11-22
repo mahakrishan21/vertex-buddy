@@ -1,0 +1,97 @@
+{
+ "voice": "af_heart",
+ "speed": 1.06,
+ "note": "Placeholder narration with a local voice. Record these lines and save them over the files in assets/audio/voice/launch3/ with the same names, then build.",
+ "lines": [
+  {
+   "id": "a1",
+   "scene": "hook",
+   "text": "What if you always knew the moment Claude needed you?"
+  },
+  {
+   "id": "b1",
+   "scene": "problem",
+   "text": "Claude Code works on its own."
+  },
+  {
+   "id": "b2",
+   "scene": "problem",
+   "text": "But when it stops to ask, it just waits. Somewhere behind your windows."
+  },
+  {
+   "id": "c1",
+   "scene": "meet",
+   "text": "Meet Vertex Buddy!"
+  },
+  {
+   "id": "c2",
+   "scene": "meet",
+   "text": "It floats above every app on your Mac, and watches every session for you."
+  },
+  {
+   "id": "d1",
+   "scene": "colours",
+   "text": "Green: Claude's working."
+  },
+  {
+   "id": "d2",
+   "scene": "colours",
+   "text": "Yellow: finished. Your turn!"
+  },
+  {
+   "id": "d3",
+   "scene": "colours",
+   "text": "Pink: it needs your answer."
+  },
+  {
+   "id": "e1",
+   "scene": "demo",
+   "text": "Hover, and see every session."
+  },
+  {
+   "id": "e2",
+   "scene": "demo",
+   "text": "Click, and you're straight back in."
+  },
+  {
+   "id": "e3",
+   "scene": "demo",
+   "text": "Drag it anywhere."
+  },
+  {
+   "id": "f1",
+   "scene": "cast",
+   "text": "Four characters."
+  },
+  {
+   "id": "f2",
+   "scene": "cast",
+   "text": "Nine behaviours."
+  },
+  {
+   "id": "f3",
+   "scene": "cast",
+   "text": "Twelve faces."
+  },
+  {
+   "id": "g1",
+   "scene": "trust",
+   "text": "No hooks."
+  },
+  {
+   "id": "g2",
+   "scene": "trust",
+   "text": "No changes to your settings."
+  },
+  {
+   "id": "g3",
+   "scene": "trust",
+   "text": "Nothing leaves your Mac."
+  },
+  {
+   "id": "h1",
+   "scene": "close",
+   "text": "Claude does the work. Vertex keeps you in the loop."
+  }
+ ]
+}

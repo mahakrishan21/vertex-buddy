@@ -1,0 +1,738 @@
+{
+ "film": "Vertex Buddy launch film, version 4",
+ "width": 1920,
+ "height": 1080,
+ "fps": 30,
+ "bpm": 120,
+ "duration": 60.5,
+ "music": {
+  "drive": true,
+  "drama": true,
+  "break_at": 46.5,
+  "bpm": 120,
+  "open_at": 15.5,
+  "close_at": 51.9,
+  "file": "launch4-bed.wav"
+ },
+ "scenes": [
+  {
+   "id": "s1",
+   "start": 0,
+   "dur": 2,
+   "beats": 4
+  },
+  {
+   "id": "s2",
+   "start": 2,
+   "dur": 2.5,
+   "beats": 5
+  },
+  {
+   "id": "s3",
+   "start": 4.5,
+   "dur": 3,
+   "beats": 6
+  },
+  {
+   "id": "s4",
+   "start": 7.5,
+   "dur": 3,
+   "beats": 6
+  },
+  {
+   "id": "s5",
+   "start": 10.5,
+   "dur": 3.5,
+   "beats": 7
+  },
+  {
+   "id": "s6",
+   "start": 14,
+   "dur": 1.5,
+   "beats": 3
+  },
+  {
+   "id": "s7",
+   "start": 15.5,
+   "dur": 3,
+   "beats": 6
+  },
+  {
+   "id": "s8",
+   "start": 18.5,
+   "dur": 4,
+   "beats": 8
+  },
+  {
+   "id": "s9",
+   "start": 22.5,
+   "dur": 4,
+   "beats": 8
+  },
+  {
+   "id": "x1",
+   "start": 26.5,
+   "dur": 2.5,
+   "beats": 5
+  },
+  {
+   "id": "x2",
+   "start": 29,
+   "dur": 2.5,
+   "beats": 5
+  },
+  {
+   "id": "x3",
+   "start": 31.5,
+   "dur": 2.5,
+   "beats": 5
+  },
+  {
+   "id": "x4",
+   "start": 34,
+   "dur": 2.5,
+   "beats": 5
+  },
+  {
+   "id": "x5",
+   "start": 36.5,
+   "dur": 2.5,
+   "beats": 5
+  },
+  {
+   "id": "s10",
+   "start": 39,
+   "dur": 4,
+   "beats": 8
+  },
+  {
+   "id": "s11",
+   "start": 43,
+   "dur": 3.5,
+   "beats": 7
+  },
+  {
+   "id": "s12",
+   "start": 46.5,
+   "dur": 4,
+   "beats": 8
+  },
+  {
+   "id": "s13",
+   "start": 50.5,
+   "dur": 10,
+   "beats": 20
+  }
+ ],
+ "vo": [
+  {
+   "id": "v1",
+   "at": 0.4,
+   "duration": 2.475,
+   "text": "Claude Code can run a whole task on its own."
+  },
+  {
+   "id": "v2",
+   "at": 4.8,
+   "duration": 2.325,
+   "text": "So you hand it one, and get on with your day."
+  },
+  {
+   "id": "v3",
+   "at": 7.7,
+   "duration": 2.645,
+   "text": "Soon you have three, four, five sessions running."
+  },
+  {
+   "id": "v4",
+   "at": 10.8,
+   "duration": 2.731,
+   "text": "And somewhere in there, one of them is waiting for you."
+  },
+  {
+   "id": "v5",
+   "at": 16,
+   "duration": 1.28,
+   "text": "Meet Vertex Buddy."
+  },
+  {
+   "id": "v6",
+   "at": 18.7,
+   "duration": 3.669,
+   "text": "It floats above every app on your Mac, and keeps an eye on all of them."
+  },
+  {
+   "id": "v7",
+   "at": 22.7,
+   "duration": 2.987,
+   "text": "It shows you who's working, who's finished, and who needs you."
+  },
+  {
+   "id": "x1",
+   "at": 26.8,
+   "duration": 1.621,
+   "text": "No sessions? It sleeps."
+  },
+  {
+   "id": "x2",
+   "at": 29.3,
+   "duration": 1.92,
+   "text": "Sessions open: it looks around."
+  },
+  {
+   "id": "x3",
+   "at": 31.8,
+   "duration": 1.877,
+   "text": "Claude's working: it types along."
+  },
+  {
+   "id": "x4",
+   "at": 34.3,
+   "duration": 2.325,
+   "text": "One finishes: it smiles and waves."
+  },
+  {
+   "id": "x5",
+   "at": 36.8,
+   "duration": 2.133,
+   "text": "One needs you: it hops and chimes."
+  },
+  {
+   "id": "v8",
+   "at": 39.3,
+   "duration": 3.008,
+   "text": "Hover to see every session. Click to jump straight in."
+  },
+  {
+   "id": "v9",
+   "at": 43.25,
+   "duration": 2.901,
+   "text": "Four characters, nine behaviours, twelve faces."
+  },
+  {
+   "id": "v10",
+   "at": 46.8,
+   "duration": 3.435,
+   "text": "No hooks. No settings to change. Nothing leaves your Mac."
+  },
+  {
+   "id": "v11",
+   "at": 52.45,
+   "duration": 2.645,
+   "text": "Claude does the work. Vertex keeps you in the loop."
+  }
+ ],
+ "sfx": [
+  {
+   "t": 0.05,
+   "sound": "key-press.mp3",
+   "volume": 0.22
+  },
+  {
+   "t": 0.37,
+   "sound": "key-press.mp3",
+   "volume": 0.22
+  },
+  {
+   "t": 0.5,
+   "sound": "pop.mp3",
+   "volume": 0.4
+  },
+  {
+   "t": 0.69,
+   "sound": "key-press.mp3",
+   "volume": 0.22
+  },
+  {
+   "t": 1.01,
+   "sound": "key-press.mp3",
+   "volume": 0.22
+  },
+  {
+   "t": 1.33,
+   "sound": "key-press.mp3",
+   "volume": 0.22
+  },
+  {
+   "t": 1.95,
+   "sound": "whoosh.mp3",
+   "volume": 0.4
+  },
+  {
+   "t": 1.98,
+   "sound": "impact-bass-1.mp3",
+   "volume": 0.38
+  },
+  {
+   "t": 4.45,
+   "sound": "whoosh-short.mp3",
+   "volume": 0.4
+  },
+  {
+   "t": 4.65,
+   "sound": "key-press.mp3",
+   "volume": 0.22
+  },
+  {
+   "t": 4.97,
+   "sound": "key-press.mp3",
+   "volume": 0.22
+  },
+  {
+   "t": 5.29,
+   "sound": "key-press.mp3",
+   "volume": 0.22
+  },
+  {
+   "t": 6,
+   "sound": "whoosh.mp3",
+   "volume": 0.35
+  },
+  {
+   "t": 6.1,
+   "sound": "key-press.mp3",
+   "volume": 0.22
+  },
+  {
+   "t": 6.42,
+   "sound": "key-press.mp3",
+   "volume": 0.22
+  },
+  {
+   "t": 6.74,
+   "sound": "key-press.mp3",
+   "volume": 0.22
+  },
+  {
+   "t": 7.45,
+   "sound": "whoosh-short.mp3",
+   "volume": 0.4
+  },
+  {
+   "t": 8.1,
+   "sound": "pop.mp3",
+   "volume": 0.3
+  },
+  {
+   "t": 8.1,
+   "sound": "riser.mp3",
+   "volume": 0.2
+  },
+  {
+   "t": 8.28,
+   "sound": "pop.mp3",
+   "volume": 0.3
+  },
+  {
+   "t": 8.46,
+   "sound": "pop.mp3",
+   "volume": 0.3
+  },
+  {
+   "t": 8.8,
+   "sound": "pop.mp3",
+   "volume": 0.42
+  },
+  {
+   "t": 9.12,
+   "sound": "pop.mp3",
+   "volume": 0.42
+  },
+  {
+   "t": 10.45,
+   "sound": "whoosh.mp3",
+   "volume": 0.4
+  },
+  {
+   "t": 10.85,
+   "sound": "key-press.mp3",
+   "volume": 0.22
+  },
+  {
+   "t": 11.17,
+   "sound": "key-press.mp3",
+   "volume": 0.22
+  },
+  {
+   "t": 11.5,
+   "sound": "riser.mp3",
+   "volume": 0.34
+  },
+  {
+   "t": 12.1,
+   "sound": "impact-bass-1.mp3",
+   "volume": 0.6
+  },
+  {
+   "t": 15.9,
+   "sound": "impact-bass-1.mp3",
+   "volume": 0.55
+  },
+  {
+   "t": 15.92,
+   "sound": "pop.mp3",
+   "volume": 0.65
+  },
+  {
+   "t": 16.05,
+   "sound": "key-press.mp3",
+   "volume": 0.22
+  },
+  {
+   "t": 16.37,
+   "sound": "key-press.mp3",
+   "volume": 0.22
+  },
+  {
+   "t": 18.45,
+   "sound": "whoosh-short.mp3",
+   "volume": 0.4
+  },
+  {
+   "t": 18.6,
+   "sound": "pop.mp3",
+   "volume": 0.4
+  },
+  {
+   "t": 18.8,
+   "sound": "key-press.mp3",
+   "volume": 0.22
+  },
+  {
+   "t": 19.12,
+   "sound": "key-press.mp3",
+   "volume": 0.22
+  },
+  {
+   "t": 19.44,
+   "sound": "key-press.mp3",
+   "volume": 0.22
+  },
+  {
+   "t": 23.05,
+   "sound": "whoosh-short.mp3",
+   "volume": 0.4
+  },
+  {
+   "t": 23.3,
+   "sound": "pop.mp3",
+   "volume": 0.4
+  },
+  {
+   "t": 23.9,
+   "sound": "whoosh.mp3",
+   "volume": 0.4
+  },
+  {
+   "t": 24.15,
+   "sound": "pop.mp3",
+   "volume": 0.4
+  },
+  {
+   "t": 24.75,
+   "sound": "whoosh-short.mp3",
+   "volume": 0.4
+  },
+  {
+   "t": 24.75,
+   "sound": "impact-bass-1.mp3",
+   "volume": 0.36
+  },
+  {
+   "t": 25,
+   "sound": "pop.mp3",
+   "volume": 0.4
+  },
+  {
+   "t": 26.46,
+   "sound": "whoosh-short.mp3",
+   "volume": 0.45
+  },
+  {
+   "t": 26.62,
+   "sound": "pop.mp3",
+   "volume": 0.4
+  },
+  {
+   "t": 26.9,
+   "sound": "key-press.mp3",
+   "volume": 0.22
+  },
+  {
+   "t": 27.22,
+   "sound": "key-press.mp3",
+   "volume": 0.22
+  },
+  {
+   "t": 28.96,
+   "sound": "whoosh.mp3",
+   "volume": 0.45
+  },
+  {
+   "t": 29.12,
+   "sound": "pop.mp3",
+   "volume": 0.4
+  },
+  {
+   "t": 29.4,
+   "sound": "key-press.mp3",
+   "volume": 0.22
+  },
+  {
+   "t": 29.72,
+   "sound": "key-press.mp3",
+   "volume": 0.22
+  },
+  {
+   "t": 31.46,
+   "sound": "whoosh-short.mp3",
+   "volume": 0.45
+  },
+  {
+   "t": 31.62,
+   "sound": "pop.mp3",
+   "volume": 0.4
+  },
+  {
+   "t": 31.9,
+   "sound": "key-press.mp3",
+   "volume": 0.22
+  },
+  {
+   "t": 32.22,
+   "sound": "key-press.mp3",
+   "volume": 0.22
+  },
+  {
+   "t": 33.96,
+   "sound": "whoosh.mp3",
+   "volume": 0.45
+  },
+  {
+   "t": 34.12,
+   "sound": "pop.mp3",
+   "volume": 0.4
+  },
+  {
+   "t": 34.4,
+   "sound": "key-press.mp3",
+   "volume": 0.22
+  },
+  {
+   "t": 34.72,
+   "sound": "key-press.mp3",
+   "volume": 0.22
+  },
+  {
+   "t": 36.46,
+   "sound": "whoosh-short.mp3",
+   "volume": 0.45
+  },
+  {
+   "t": 36.5,
+   "sound": "impact-bass-1.mp3",
+   "volume": 0.4
+  },
+  {
+   "t": 36.62,
+   "sound": "pop.mp3",
+   "volume": 0.4
+  },
+  {
+   "t": 36.9,
+   "sound": "key-press.mp3",
+   "volume": 0.22
+  },
+  {
+   "t": 37.22,
+   "sound": "key-press.mp3",
+   "volume": 0.22
+  },
+  {
+   "t": 38.95,
+   "sound": "whoosh.mp3",
+   "volume": 0.4
+  },
+  {
+   "t": 39.2,
+   "sound": "pop.mp3",
+   "volume": 0.45
+  },
+  {
+   "t": 39.25,
+   "sound": "key-press.mp3",
+   "volume": 0.22
+  },
+  {
+   "t": 39.57,
+   "sound": "key-press.mp3",
+   "volume": 0.22
+  },
+  {
+   "t": 41.6,
+   "sound": "click-soft.mp3",
+   "volume": 0.85
+  },
+  {
+   "t": 42.95,
+   "sound": "whoosh-short.mp3",
+   "volume": 0.4
+  },
+  {
+   "t": 43.3,
+   "sound": "pop.mp3",
+   "volume": 0.42
+  },
+  {
+   "t": 44.2,
+   "sound": "pop.mp3",
+   "volume": 0.42
+  },
+  {
+   "t": 45.1,
+   "sound": "pop.mp3",
+   "volume": 0.42
+  },
+  {
+   "t": 46.45,
+   "sound": "whoosh.mp3",
+   "volume": 0.4
+  },
+  {
+   "t": 46.8,
+   "sound": "key-press.mp3",
+   "volume": 0.26
+  },
+  {
+   "t": 47.12,
+   "sound": "key-press.mp3",
+   "volume": 0.26
+  },
+  {
+   "t": 47.75,
+   "sound": "key-press.mp3",
+   "volume": 0.26
+  },
+  {
+   "t": 47.9,
+   "sound": "riser.mp3",
+   "volume": 0.3
+  },
+  {
+   "t": 48.07,
+   "sound": "key-press.mp3",
+   "volume": 0.26
+  },
+  {
+   "t": 48.9,
+   "sound": "key-press.mp3",
+   "volume": 0.26
+  },
+  {
+   "t": 49.22,
+   "sound": "key-press.mp3",
+   "volume": 0.26
+  },
+  {
+   "t": 50.45,
+   "sound": "whoosh-short.mp3",
+   "volume": 0.4
+  },
+  {
+   "t": 51.88,
+   "sound": "impact-bass-1.mp3",
+   "volume": 0.7
+  },
+  {
+   "t": 51.9,
+   "sound": "pop.mp3",
+   "volume": 0.6
+  },
+  {
+   "t": 52.4,
+   "sound": "key-press.mp3",
+   "volume": 0.22
+  },
+  {
+   "t": 52.72,
+   "sound": "key-press.mp3",
+   "volume": 0.22
+  },
+  {
+   "t": 53.4,
+   "sound": "key-press.mp3",
+   "volume": 0.22
+  },
+  {
+   "t": 53.72,
+   "sound": "key-press.mp3",
+   "volume": 0.22
+  },
+  {
+   "t": 54.04,
+   "sound": "key-press.mp3",
+   "volume": 0.22
+  }
+ ],
+ "words": [
+  "Claude Code",
+  "runs the whole task",
+  "on its own.",
+  "You hand it a task",
+  "and get on with your day.",
+  "Soon you have",
+  "sessions running",
+  "one of them",
+  "is waiting.",
+  "Vertex Buddy",
+  "a little companion for Claude Code",
+  "above every app",
+  "on your Mac",
+  "Working",
+  "Finished",
+  "Needs you",
+  "it sleeps.",
+  "01 / 05",
+  "no sessions",
+  "it looks around.",
+  "02 / 05",
+  "website · Idle",
+  "it types along.",
+  "03 / 05",
+  "api · Working…",
+  "it smiles and waves.",
+  "04 / 05",
+  "website · Finished, your turn",
+  "it hops and chimes.",
+  "05 / 05",
+  "api · Needs you: Bash(npm test)",
+  "every session",
+  "click to jump in",
+  "Cloud Vertex",
+  "Pixel Vertex",
+  "Robo Vertex",
+  "Cozy Vertex",
+  "neutral",
+  "happy",
+  "excited",
+  "curious",
+  "confused",
+  "sleepy",
+  "surprised",
+  "playful",
+  "focused",
+  "worried",
+  "pondering",
+  "sneaky",
+  "characters",
+  "behaviours",
+  "faces",
+  "No hooks.",
+  "No settings to change.",
+  "Nothing leaves your Mac.",
+  "Claude does the work.",
+  "Vertex keeps you in the loop.",
+  "VERTEX BUDDY",
+  "an independent project, not made by Anthropic"
+ ]
+}

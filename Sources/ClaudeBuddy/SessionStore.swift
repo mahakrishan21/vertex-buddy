@@ -132,6 +132,15 @@ final class SessionStore: ObservableObject {
         if demoClock == 52 { acknowledgeAll() }
     }
 
+    /// Fixed sessions for `--film`, given as two states in a row so a busy session can be seen to
+    /// finish. Nothing is read from disk and no timer runs.
+    func showFilm(_ before: [ClaudeSession], _ after: [ClaudeSession]) {
+        demo = before
+        ingest(before, quiet: true)
+        demo = after
+        ingest(after, quiet: true)
+    }
+
     func acknowledge(_ alert: SessionAlert) {
         acknowledged.insert(alert.id)
         alerts.removeAll { $0.id == alert.id }

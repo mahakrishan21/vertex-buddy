@@ -1,0 +1,92 @@
+{
+ "voice": "af_heart",
+ "speed": 1.0,
+ "note": "Scratch narration with a local voice. Replace the files in assets/audio/voice/launch/ with a recorded voice of the same lines, then build.",
+ "lines": [
+  {
+   "id": "v01",
+   "scene": "problem",
+   "text": "Claude is working."
+  },
+  {
+   "id": "v02",
+   "scene": "problem",
+   "text": "You're doing something else."
+  },
+  {
+   "id": "v03",
+   "scene": "problem",
+   "text": "And then... it needs you."
+  },
+  {
+   "id": "v04",
+   "scene": "meet",
+   "text": "Meet Vertex Buddy."
+  },
+  {
+   "id": "v05",
+   "scene": "meet",
+   "text": "Your little companion for Claude Code."
+  },
+  {
+   "id": "v06",
+   "scene": "status",
+   "text": "Every app. Every space. Even full-screen."
+  },
+  {
+   "id": "v07",
+   "scene": "status",
+   "text": "Green: working."
+  },
+  {
+   "id": "v08",
+   "scene": "status",
+   "text": "Yellow: finished. Your turn."
+  },
+  {
+   "id": "v09",
+   "scene": "status",
+   "text": "Pink: needs your answer."
+  },
+  {
+   "id": "v10",
+   "scene": "demo",
+   "text": "See every live session."
+  },
+  {
+   "id": "v11",
+   "scene": "demo",
+   "text": "Know which one needs you."
+  },
+  {
+   "id": "v12",
+   "scene": "demo",
+   "text": "Click. Jump to the session."
+  },
+  {
+   "id": "v13",
+   "scene": "cast",
+   "text": "Four characters."
+  },
+  {
+   "id": "v14",
+   "scene": "cast",
+   "text": "Nine behaviours."
+  },
+  {
+   "id": "v15",
+   "scene": "cast",
+   "text": "Twelve faces."
+  },
+  {
+   "id": "v16",
+   "scene": "close",
+   "text": "No hooks. No Claude settings changes. Nothing sent anywhere."
+  },
+  {
+   "id": "v17",
+   "scene": "close",
+   "text": "Claude does the work. Vertex keeps you in the loop."
+  }
+ ]
+}

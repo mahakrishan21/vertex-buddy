@@ -94,6 +94,7 @@ build/ClaudeBuddy.app/Contents/MacOS/ClaudeBuddy --demo               # fake ses
 build/ClaudeBuddy.app/Contents/MacOS/ClaudeBuddy --behavior walking   # start pinned to one behaviour
 build/ClaudeBuddy.app/Contents/MacOS/ClaudeBuddy --look cloud         # show one character: cloud, pixel, robo or cozy
 build/ClaudeBuddy.app/Contents/MacOS/ClaudeBuddy --snapshot /tmp/buddy   # render every behaviour to PNG
+build/ClaudeBuddy.app/Contents/MacOS/ClaudeBuddy --film spec.json out/   # write Vertex as transparent frame sequences, for videos
 ```
 
 ## Where things are
@@ -120,3 +121,7 @@ efficiency cores, and about 5–6% while you are watching it.
 `characters-light.png`, all four characters in the same six poses. Because the window is drawn by
 the GPU, `BUDDY_DUMP=/tmp/frame.png` saves what is really on screen four seconds after launch.
 `BUDDY_WATCHED=1` (or `0`) pins the frame rate to the watched (or unwatched) setting for measuring.
+
+`--film` plays a scripted run of behaviours from a fixed seed and writes each frame as a PNG with a
+transparent background, plus the speech bubble as an image. The spec format is described at the top
+of `Film.swift`; the launch film's spec is `video/source/footage.json`.

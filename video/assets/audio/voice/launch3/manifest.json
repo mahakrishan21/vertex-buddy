@@ -1,0 +1,134 @@
+{
+ "film": "launch3",
+ "voice": "af_heart",
+ "speed": 1.06,
+ "engine": "Kokoro-82M (local, via hyperframes tts)",
+ "lines": [
+  {
+   "id": "a1",
+   "scene": "hook",
+   "text": "What if you always knew the moment Claude needed you?",
+   "file": "assets/audio/voice/launch3/a1.wav",
+   "duration": 2.475
+  },
+  {
+   "id": "b1",
+   "scene": "problem",
+   "text": "Claude Code works on its own.",
+   "file": "assets/audio/voice/launch3/b1.wav",
+   "duration": 1.6
+  },
+  {
+   "id": "b2",
+   "scene": "problem",
+   "text": "But when it stops to ask, it just waits. Somewhere behind your windows.",
+   "file": "assets/audio/voice/launch3/b2.wav",
+   "duration": 3.797
+  },
+  {
+   "id": "c1",
+   "scene": "meet",
+   "text": "Meet Vertex Buddy!",
+   "file": "assets/audio/voice/launch3/c1.wav",
+   "duration": 1.216
+  },
+  {
+   "id": "c2",
+   "scene": "meet",
+   "text": "It floats above every app on your Mac, and watches every session for you.",
+   "file": "assets/audio/voice/launch3/c2.wav",
+   "duration": 3.797
+  },
+  {
+   "id": "d1",
+   "scene": "colours",
+   "text": "Green: Claude's working.",
+   "file": "assets/audio/voice/launch3/d1.wav",
+   "duration": 1.408
+  },
+  {
+   "id": "d2",
+   "scene": "colours",
+   "text": "Yellow: finished. Your turn!",
+   "file": "assets/audio/voice/launch3/d2.wav",
+   "duration": 1.536
+  },
+  {
+   "id": "d3",
+   "scene": "colours",
+   "text": "Pink: it needs your answer.",
+   "file": "assets/audio/voice/launch3/d3.wav",
+   "duration": 1.451
+  },
+  {
+   "id": "e1",
+   "scene": "demo",
+   "text": "Hover, and see every session.",
+   "file": "assets/audio/voice/launch3/e1.wav",
+   "duration": 1.643
+  },
+  {
+   "id": "e2",
+   "scene": "demo",
+   "text": "Click, and you're straight back in.",
+   "file": "assets/audio/voice/launch3/e2.wav",
+   "duration": 1.472
+  },
+  {
+   "id": "e3",
+   "scene": "demo",
+   "text": "Drag it anywhere.",
+   "file": "assets/audio/voice/launch3/e3.wav",
+   "duration": 1.109
+  },
+  {
+   "id": "f1",
+   "scene": "cast",
+   "text": "Four characters.",
+   "file": "assets/audio/voice/launch3/f1.wav",
+   "duration": 1.067
+  },
+  {
+   "id": "f2",
+   "scene": "cast",
+   "text": "Nine behaviours.",
+   "file": "assets/audio/voice/launch3/f2.wav",
+   "duration": 1.109
+  },
+  {
+   "id": "f3",
+   "scene": "cast",
+   "text": "Twelve faces.",
+   "file": "assets/audio/voice/launch3/f3.wav",
+   "duration": 1.067
+  },
+  {
+   "id": "g1",
+   "scene": "trust",
+   "text": "No hooks.",
+   "file": "assets/audio/voice/launch3/g1.wav",
+   "duration": 0.917
+  },
+  {
+   "id": "g2",
+   "scene": "trust",
+   "text": "No changes to your settings.",
+   "file": "assets/audio/voice/launch3/g2.wav",
+   "duration": 1.493
+  },
+  {
+   "id": "g3",
+   "scene": "trust",
+   "text": "Nothing leaves your Mac.",
+   "file": "assets/audio/voice/launch3/g3.wav",
+   "duration": 1.301
+  },
+  {
+   "id": "h1",
+   "scene": "close",
+   "text": "Claude does the work. Vertex keeps you in the loop.",
+   "file": "assets/audio/voice/launch3/h1.wav",
+   "duration": 2.56
+  }
+ ]
+}

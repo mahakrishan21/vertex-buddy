@@ -1,0 +1,25 @@
+{
+  "takes": [
+    { "name": "day", "look": "cozy", "scale": 4.8, "seed": 11, "preroll": 16, "duration": 26.4,
+      "script": [[0, "sleeping"], [4.8, "idle"], [8.4, "working"], [14.4, "yourTurn"], [20.4, "needsYou"], [23.7, "working"]],
+      "pokes": [23.4] },
+    { "name": "cast-cloud", "look": "cloud", "scale": 3.6, "seed": 21, "preroll": 2.3, "duration": 8.4,
+      "script": [[0, "idle"], [1.8, "working"], [3.6, "happy"], [5.4, "curious"], [7.2, "thinking"]] },
+    { "name": "cast-pixel", "look": "pixel", "scale": 3.6, "seed": 22, "preroll": 3.1, "duration": 8.4,
+      "script": [[0, "idle"], [1.8, "working"], [3.6, "happy"], [5.4, "curious"], [7.2, "thinking"]] },
+    { "name": "cast-robo", "look": "robo", "scale": 3.6, "seed": 23, "preroll": 2.7, "duration": 8.4,
+      "script": [[0, "idle"], [1.8, "working"], [3.6, "happy"], [5.4, "curious"], [7.2, "thinking"]] },
+    { "name": "cast-cozy", "look": "cozy", "scale": 3.6, "seed": 24, "preroll": 3.6, "duration": 8.4,
+      "script": [[0, "idle"], [1.8, "working"], [3.6, "happy"], [5.4, "curious"], [7.2, "thinking"]] },
+    { "name": "close", "look": "cozy", "scale": 4.8, "seed": 31, "preroll": 3, "duration": 10.8,
+      "script": [[0, "watching"], [4.8, "happy"], [8.1, "idle"]], "pokes": [9.0] }
+  ],
+  "bubbles": [
+    { "name": "done", "scale": 4, "scheme": "light",
+      "before": [["website", "busy"], ["api", "busy"], ["docs", "idle", "", "cli", "7200"]],
+      "after":  [["website", "idle"], ["api", "busy"], ["docs", "idle", "", "cli", "7200"]] },
+    { "name": "needs", "scale": 4, "scheme": "light",
+      "before": [["website", "idle", "", "claude-vscode", "1500"], ["api", "busy"], ["docs", "idle", "", "cli", "7200"]],
+      "after":  [["website", "idle", "", "claude-vscode", "1500"], ["api", "waiting", "Bash(npm test)"], ["docs", "idle", "", "cli", "7200"]] }
+  ]
+}

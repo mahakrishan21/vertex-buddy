@@ -1,0 +1,30 @@
+{
+ "file": "assets/audio/music/launch2-bed.wav",
+ "format": "launch2",
+ "seconds": 57.5,
+ "bpm": 120,
+ "key": "D minor, opening to F major",
+ "opens_at": 11.5,
+ "peak_dbfs": -3.56,
+ "rms_dbfs": -19.92,
+ "ducked_under": [
+  "a1",
+  "b1",
+  "b2",
+  "c1",
+  "c2",
+  "d1",
+  "d2",
+  "d3",
+  "e1",
+  "e2",
+  "f1",
+  "f2",
+  "f3",
+  "g1",
+  "g2",
+  "g3",
+  "h1"
+ ],
+ "origin": "written and synthesised for this film by source/audio/music.py; no samples"
+}

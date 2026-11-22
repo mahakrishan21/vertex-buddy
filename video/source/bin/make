@@ -1,0 +1,89 @@
+#!/usr/bin/env bash
+# Vertex Buddy launch film: one entry point. Run it from anywhere.
+#
+#   Every step takes an optional film name after it: launch (the 55 s film, the default) or film (the first 45 s cut).
+#   bin/make voice             generate the scratch narration for the launch film (local voice)
+#   bin/make music             write the scratch music bed for the launch film
+#   bin/make footage           record Vertex from the app (source/footage.json) and encode it as transparent video
+#   bin/make build             write the HyperFrames project (source/film) from the README, the footage and build/film.mjs
+#   bin/make check             run the HyperFrames checker and print a short summary
+#   bin/make frames <t,t,...>  render single frames into video/docs/frames/ to look at
+#   bin/make render            render at delivery quality, master the sound, write video/renders/
+#   bin/make all               build, check, render
+#   bin/make doctor            tool versions and paths
+#
+# Everything the tools download or cache stays in video/.home; nothing is installed for the user account.
+set -euo pipefail
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+. "$HERE/env.sh"
+V="$VIDEO_DIR"; SRC="$V/source"; cd "$SRC"
+APP="$V/../.build/release/ClaudeBuddy"
+cmd="${1:-help}"; shift || true
+# three films: "launch2" (the narrated film, the default), "launch" (the 55 s film before it) and "film" (the first 45 s cut)
+F=launch5; case "${1:-}" in launch5|launch4|launch3|launch2|launch|film) F="$1"; shift ;; esac
+if [ "$F" = launch5 ]; then NAME=vertex-buddy-launch-v5-1920x1080; SPEC="$SRC/footage-launch2.json"; FOOT="$V/assets/footage-launch2"; elif [ "$F" = launch4 ]; then NAME=vertex-buddy-launch-v4-1920x1080; SPEC="$SRC/footage-launch2.json"; FOOT="$V/assets/footage-launch2"; elif [ "$F" = launch3 ]; then NAME=vertex-buddy-launch-v3-1920x1080; SPEC="$SRC/footage-launch2.json"; FOOT="$V/assets/footage-launch2"; elif [ "$F" = launch2 ]; then NAME=vertex-buddy-launch-v2-1920x1080; SPEC="$SRC/footage-launch2.json"; FOOT="$V/assets/footage-launch2"; elif [ "$F" = launch ]; then NAME=vertex-buddy-launch-55s-1920x1080; SPEC="$SRC/footage-launch.json"; FOOT="$V/assets/footage-launch"; else NAME=vertex-buddy-launch-1920x1080; SPEC="$SRC/footage.json"; FOOT="$V/assets/footage"; fi
+# With a music bed the film is mastered to a normal social level. Without one there are only a few sound effects,
+# and pushing those to the same level would make every click and pop loud, so they are kept soft.
+if [ "$F" != film ] || ls "$V/assets/audio/music/"vertex.* >/dev/null 2>&1; then TARGET_LUFS=-15; TARGET_TP=-1.5; else TARGET_LUFS=-24; TARGET_TP=-6; fi
+say() { printf '\n== %s\n' "$*"; }
+
+summary() {
+  local f; f="$(ls -t "$SRC/$F/.hyperframes/artifacts/checks/"*.json 2>/dev/null | head -1)"; [ -n "$f" ] || { echo "no check report"; return 1; }
+  /usr/bin/python3 -I - "$f" <<'PY'
+import json, sys, collections
+d = json.load(open(sys.argv[1])); out = []
+def walk(o):
+    if isinstance(o, dict):
+        if ('code' in o or 'rule' in o) and ('severity' in o or 'level' in o): out.append(o)
+        for v in o.values(): walk(v)
+    elif isinstance(o, list):
+        for v in o: walk(v)
+walk(d)
+c = collections.Counter(((o.get('severity') or o.get('level')), (o.get('code') or o.get('rule'))) for o in out)
+print('ok:', d.get('ok'))
+for (sev, code), n in sorted(c.items()): print(f'  {sev:8} {n:3}  {code}')
+seen = set()
+for o in out:
+    key = (o.get('code') or o.get('rule'), str(o.get('selector')))
+    if key in seen: continue
+    seen.add(key)
+    if (o.get('severity') or o.get('level')) in ('error', 'warning'):
+        print('  ', (o.get('severity') or o.get('level')).upper(), key[0], '|', str(o.get('message'))[:170], '|', key[1][:50], o.get('time', ''))
+sys.exit(0 if d.get('ok') else 1)
+PY
+}
+
+measure() {
+  local out="$V/renders/$NAME.mp4"
+  { "$FFPROBE" -v error -show_entries stream=codec_name,codec_type,width,height,r_frame_rate,pix_fmt,sample_rate,channels,nb_frames:format=duration,size,bit_rate -of default=nw=1 "$out" | tr '\n' ' '; echo
+    "$FFMPEG" -hide_banner -nostats -i "$out" -map 0:a -af ebur128=peak=true -f null - 2>&1 | awk '/Summary:/,0' | tr -s ' ' | grep -E "I:|LRA:|Peak:" | tr '\n' ' '; echo; } | tee "$V/renders/$NAME.measured.txt"
+}
+
+master() {   # two-pass loudness normalisation; the picture is copied untouched
+  local raw="$V/renders/.raw-$NAME.mp4" out="$V/renders/$NAME.mp4" m args
+  m="$("$FFMPEG" -hide_banner -nostats -i "$raw" -map 0:a -af "loudnorm=I=$TARGET_LUFS:TP=$TARGET_TP:LRA=11:print_format=json" -f null - 2>&1 | awk '/^\{/,/^\}/')"
+  args="$(/usr/bin/python3 -I -c "import json,sys; j=json.loads(sys.argv[1]); print('measured_I=%s:measured_TP=%s:measured_LRA=%s:measured_thresh=%s:offset=%s' % (j['input_i'], j['input_tp'], j['input_lra'], j['input_thresh'], j['target_offset']))" "$m")"
+  "$FFMPEG" -hide_banner -loglevel error -y -i "$raw" -map 0:v -map 0:a -c:v copy -af "loudnorm=I=$TARGET_LUFS:TP=$TARGET_TP:LRA=11:$args:linear=true" -ar 48000 -c:a aac -b:a 256k -movflags +faststart "$out"
+  measure
+}
+
+case "$cmd" in
+  doctor)  ./bin/hf doctor; echo; node --version; "$FFMPEG" -version | head -1 ;;
+  footage) [ -x "$APP" ] || { echo "build the app first: swift build -c release (in the repository root)" >&2; exit 1; }
+           say "record"; mkdir -p "$V/.home/empty"
+           HOME="$REAL_HOME" CLAUDE_BUDDY_SESSIONS_DIR="$V/.home/empty" "$APP" --film "$SPEC" "$FOOT" | grep -c '^film'
+           say "encode"; for d in "$FOOT"/*/; do n="$(basename "$d")"; [ -f "$d/0000.png" ] || continue
+             "$FFMPEG" -hide_banner -loglevel error -y -framerate 30 -i "$d/%04d.png" -vf "format=rgba,pad=ceil(iw/2)*2:ceil(ih/2)*2:0:0:color=0x00000000" -c:v libvpx-vp9 -pix_fmt yuva420p -crf 14 -b:v 0 -g 15 -auto-alt-ref 0 -row-mt 1 "$FOOT/$n.webm"
+             done; du -sh "$FOOT"/*.webm | wc -l ;;
+  build)   say "build $F"; node "build/$F.mjs" ;;
+  voice)   say "narration"; node audio/voice.mjs "$F" ;;
+  music)   say "music bed"; "$HYPERFRAMES_PYTHON" audio/music.py "$F" ;;
+  check)   say "check"; ./bin/hf check "$F" --json > /dev/null 2>&1 || true; summary ;;
+  frames)  at="${1:?times, comma separated}"; mkdir -p "$V/docs/frames/$F"; ./bin/hf snapshot "$F" --at "$at" --no-end --output "$V/docs/frames/$F" | tail -1 ;;
+  render)  mkdir -p "$V/renders" "$V/docs/logs"; say "render"
+           ./bin/hf render "$F" --quality delivery --video-frame-format png --fps 30 --output "$V/renders/.raw-$NAME.mp4" 2>&1 | tr '\r' '\n' | grep -v '^[[:space:]]*$' | tail -25 > "$V/docs/logs/render-$F.log"
+           say "master"; master; rm -f "$V/renders/.raw-$NAME.mp4" ;;
+  measure) measure ;;
+  all)     "$HERE/make" build "$F"; "$HERE/make" check "$F"; "$HERE/make" render "$F" ;;
+  *)       sed -n '2,15p' "$0" | sed 's/^# \{0,1\}//' ;;
+esac

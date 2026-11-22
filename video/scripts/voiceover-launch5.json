@@ -1,0 +1,82 @@
+{
+ "voice": "af_heart",
+ "speed": 1.02,
+ "note": "Placeholder narration with a local voice. Record these lines and save them over the files in assets/audio/voice/launch5/ with the same names, then build.",
+ "lines": [
+  {
+   "id": "n1",
+   "scene": "film",
+   "text": "Working with Claude Code, you start in the loop."
+  },
+  {
+   "id": "n2",
+   "scene": "film",
+   "text": "Then one session becomes five."
+  },
+  {
+   "id": "v2",
+   "scene": "film",
+   "text": "So you hand them off, and step away."
+  },
+  {
+   "id": "n4",
+   "scene": "film",
+   "text": "And one of them stops. It needs you."
+  },
+  {
+   "id": "v5",
+   "scene": "film",
+   "text": "Meet Vertex Buddy."
+  },
+  {
+   "id": "v6",
+   "scene": "film",
+   "text": "It floats above every app on your Mac, and watches them all."
+  },
+  {
+   "id": "x1",
+   "scene": "film",
+   "text": "Asleep when nothing's running."
+  },
+  {
+   "id": "x2",
+   "scene": "film",
+   "text": "Calm when sessions are open."
+  },
+  {
+   "id": "x3",
+   "scene": "film",
+   "text": "Busy when Claude's working."
+  },
+  {
+   "id": "x4",
+   "scene": "film",
+   "text": "Delighted when one finishes."
+  },
+  {
+   "id": "x5",
+   "scene": "film",
+   "text": "Unmissable when one needs you."
+  },
+  {
+   "id": "v8",
+   "scene": "film",
+   "text": "Hover for every session. Click, and you're back in."
+  },
+  {
+   "id": "v9",
+   "scene": "film",
+   "text": "Four characters. Nine behaviours. Twelve faces."
+  },
+  {
+   "id": "v10",
+   "scene": "film",
+   "text": "No hooks. No settings to change. Nothing leaves your Mac."
+  },
+  {
+   "id": "v11",
+   "scene": "film",
+   "text": "Claude does the work. Vertex keeps you in the loop."
+  }
+ ]
+}

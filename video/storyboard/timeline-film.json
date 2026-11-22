@@ -1,0 +1,109 @@
+{
+ "film": "Vertex Buddy launch film, 16:9",
+ "width": 1920,
+ "height": 1080,
+ "fps": 30,
+ "bpm": 100,
+ "duration": 45.6,
+ "music": null,
+ "scenes": [
+  {
+   "id": "day",
+   "start": 0,
+   "dur": 26.4,
+   "beats": 44
+  },
+  {
+   "id": "cast",
+   "start": 26.4,
+   "dur": 8.4,
+   "beats": 14
+  },
+  {
+   "id": "close",
+   "start": 34.8,
+   "dur": 10.8,
+   "beats": 18
+  }
+ ],
+ "sfx": [
+  {
+   "t": 15,
+   "sound": "pop.mp3",
+   "volume": 0.6
+  },
+  {
+   "t": 20.4,
+   "sound": "pop.mp3",
+   "volume": 0.5
+  },
+  {
+   "t": 23.4,
+   "sound": "click-soft.mp3",
+   "volume": 0.8
+  },
+  {
+   "t": 26.18,
+   "sound": "whoosh-short.mp3",
+   "volume": 0.5
+  },
+  {
+   "t": 28.2,
+   "sound": "pop.mp3",
+   "volume": 0.32
+  },
+  {
+   "t": 30,
+   "sound": "pop.mp3",
+   "volume": 0.32
+  },
+  {
+   "t": 31.8,
+   "sound": "pop.mp3",
+   "volume": 0.32
+  },
+  {
+   "t": 33.6,
+   "sound": "pop.mp3",
+   "volume": 0.32
+  },
+  {
+   "t": 34.58,
+   "sound": "whoosh.mp3",
+   "volume": 0.5
+  },
+  {
+   "t": 43.15,
+   "sound": "pop.mp3",
+   "volume": 0.4
+  }
+ ],
+ "words": [
+  "Vertex is a little 3D buddy that floats above every app on your Mac",
+  "Sessions open, nothing to do",
+  "Aqua",
+  "Claude is working",
+  "Green",
+  "every Space, full-screen apps too",
+  "A session finished: your turn",
+  "Sunny yellow",
+  "A session needs your answer",
+  "Rose pink",
+  "Click the buddy: jumps to the waiting session",
+  "Cloud Vertex",
+  "Pixel Vertex",
+  "Robo Vertex",
+  "Cozy Vertex",
+  "Idle",
+  "Working",
+  "Happy",
+  "Curious",
+  "Thinking",
+  "Vertex comes as four characters.",
+  "They all do every behaviour and pull every face; only the body differs.",
+  "Behaviour",
+  "It needs no hooks and no changes to Claude settings, and only reads the files, never writes them.",
+  "telling you is the whole point.",
+  "Vertex Buddy"
+ ]
+}

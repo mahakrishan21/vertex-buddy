@@ -1,0 +1,87 @@
+{
+ "voice": "af_heart",
+ "speed": 1.02,
+ "note": "Placeholder narration with a local voice. Record these lines and save them over the files in assets/audio/voice/launch4/ with the same names, then build.",
+ "lines": [
+  {
+   "id": "v1",
+   "scene": "film",
+   "text": "Claude Code can run a whole task on its own."
+  },
+  {
+   "id": "v2",
+   "scene": "film",
+   "text": "So you hand it one, and get on with your day."
+  },
+  {
+   "id": "v3",
+   "scene": "film",
+   "text": "Soon you have three, four, five sessions running."
+  },
+  {
+   "id": "v4",
+   "scene": "film",
+   "text": "And somewhere in there, one of them is waiting for you."
+  },
+  {
+   "id": "v5",
+   "scene": "film",
+   "text": "Meet Vertex Buddy."
+  },
+  {
+   "id": "v6",
+   "scene": "film",
+   "text": "It floats above every app on your Mac, and keeps an eye on all of them."
+  },
+  {
+   "id": "v7",
+   "scene": "film",
+   "text": "It shows you who's working, who's finished, and who needs you."
+  },
+  {
+   "id": "x1",
+   "scene": "states",
+   "text": "No sessions? It sleeps."
+  },
+  {
+   "id": "x2",
+   "scene": "states",
+   "text": "Sessions open: it looks around."
+  },
+  {
+   "id": "x3",
+   "scene": "states",
+   "text": "Claude's working: it types along."
+  },
+  {
+   "id": "x4",
+   "scene": "states",
+   "text": "One finishes: it smiles and waves."
+  },
+  {
+   "id": "x5",
+   "scene": "states",
+   "text": "One needs you: it hops and chimes."
+  },
+  {
+   "id": "v8",
+   "scene": "film",
+   "text": "Hover to see every session. Click to jump straight in."
+  },
+  {
+   "id": "v9",
+   "scene": "film",
+   "text": "Four characters, nine behaviours, twelve faces."
+  },
+  {
+   "id": "v10",
+   "scene": "film",
+   "text": "No hooks. No settings to change. Nothing leaves your Mac."
+  },
+  {
+   "id": "v11",
+   "scene": "film",
+   "text": "Claude does the work. Vertex keeps you in the loop."
+  }
+ ]
+}

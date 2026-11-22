@@ -1,0 +1,13 @@
+{
+  "name": "video-toolchain",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Pinned, project-local tools for HyperFrames films. Copy this folder into a project's video/source and run npm install there.",
+  "type": "module",
+  "engines": { "node": ">=22" },
+  "devDependencies": {
+    "hyperframes": "0.9.59",
+    "ffmpeg-static": "5.2.0",
+    "ffprobe-static": "3.1.0"
+  }
+}

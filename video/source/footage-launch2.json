@@ -1,0 +1,522 @@
+{
+ "takes": [
+  {
+   "name": "hero",
+   "look": "cozy",
+   "scale": 6.4,
+   "seed": 12,
+   "preroll": 1.2,
+   "duration": 5,
+   "holds": [
+    [
+     -1.2,
+     0.42
+    ]
+   ],
+   "script": [
+    [
+     0,
+     "idle"
+    ],
+    [
+     1.9,
+     "watching"
+    ]
+   ],
+   "pokes": [
+    2.6
+   ]
+  },
+  {
+   "name": "desk",
+   "look": "cozy",
+   "scale": 4.8,
+   "seed": 51,
+   "preroll": 2,
+   "duration": 7,
+   "script": [
+    [
+     0,
+     "watching"
+    ]
+   ]
+  },
+  {
+   "name": "work",
+   "look": "cozy",
+   "scale": 5.6,
+   "seed": 52,
+   "preroll": 2,
+   "duration": 4,
+   "script": [
+    [
+     0,
+     "working"
+    ]
+   ]
+  },
+  {
+   "name": "turn",
+   "look": "cozy",
+   "scale": 5.6,
+   "seed": 53,
+   "preroll": 0.2,
+   "duration": 4,
+   "script": [
+    [
+     0,
+     "yourTurn"
+    ]
+   ]
+  },
+  {
+   "name": "needs",
+   "look": "cozy",
+   "scale": 5.6,
+   "seed": 54,
+   "preroll": 0.2,
+   "duration": 4,
+   "script": [
+    [
+     0,
+     "needsYou"
+    ]
+   ]
+  },
+  {
+   "name": "demo",
+   "look": "cozy",
+   "scale": 4.8,
+   "seed": 14,
+   "preroll": 2,
+   "duration": 9,
+   "script": [
+    [
+     0,
+     "needsYou"
+    ],
+    [
+     5.6,
+     "working"
+    ]
+   ],
+   "pokes": [
+    5.3
+   ]
+  },
+  {
+   "name": "cast-cloud",
+   "look": "cloud",
+   "scale": 4,
+   "seed": 21,
+   "preroll": 2.3,
+   "duration": 4.2,
+   "script": [
+    [
+     0,
+     "idle"
+    ],
+    [
+     0.8,
+     "happy"
+    ]
+   ]
+  },
+  {
+   "name": "cast-pixel",
+   "look": "pixel",
+   "scale": 4,
+   "seed": 22,
+   "preroll": 3.1,
+   "duration": 4.2,
+   "script": [
+    [
+     0,
+     "idle"
+    ],
+    [
+     0.8,
+     "happy"
+    ]
+   ]
+  },
+  {
+   "name": "cast-robo",
+   "look": "robo",
+   "scale": 4,
+   "seed": 23,
+   "preroll": 2.7,
+   "duration": 4.2,
+   "script": [
+    [
+     0,
+     "idle"
+    ],
+    [
+     0.8,
+     "happy"
+    ]
+   ]
+  },
+  {
+   "name": "cast-cozy",
+   "look": "cozy",
+   "scale": 4,
+   "seed": 24,
+   "preroll": 3.6,
+   "duration": 4.2,
+   "script": [
+    [
+     0,
+     "idle"
+    ],
+    [
+     0.8,
+     "happy"
+    ]
+   ]
+  },
+  {
+   "name": "beh-idle",
+   "look": "cozy",
+   "scale": 5.6,
+   "seed": 44,
+   "preroll": 2.0,
+   "duration": 0.4,
+   "script": [
+    [
+     0,
+     "idle"
+    ]
+   ]
+  },
+  {
+   "name": "beh-working",
+   "look": "cozy",
+   "scale": 5.6,
+   "seed": 47,
+   "preroll": 1.5,
+   "duration": 0.4,
+   "script": [
+    [
+     0,
+     "working"
+    ]
+   ]
+  },
+  {
+   "name": "beh-thinking",
+   "look": "cozy",
+   "scale": 5.6,
+   "seed": 48,
+   "preroll": 2.5,
+   "duration": 0.4,
+   "script": [
+    [
+     0,
+     "thinking"
+    ]
+   ]
+  },
+  {
+   "name": "beh-walking",
+   "look": "cozy",
+   "scale": 5.6,
+   "seed": 47,
+   "preroll": 1.2,
+   "duration": 0.4,
+   "script": [
+    [
+     0,
+     "walking"
+    ]
+   ]
+  },
+  {
+   "name": "beh-following",
+   "look": "cozy",
+   "scale": 5.6,
+   "seed": 49,
+   "preroll": 1.5,
+   "duration": 0.4,
+   "script": [
+    [
+     0,
+     "following"
+    ]
+   ]
+  },
+  {
+   "name": "beh-watching",
+   "look": "cozy",
+   "scale": 5.6,
+   "seed": 48,
+   "preroll": 2.5,
+   "duration": 0.4,
+   "script": [
+    [
+     0,
+     "watching"
+    ]
+   ]
+  },
+  {
+   "name": "beh-sleeping",
+   "look": "cozy",
+   "scale": 5.6,
+   "seed": 48,
+   "preroll": 9,
+   "duration": 0.4,
+   "script": [
+    [
+     0,
+     "sleeping"
+    ]
+   ]
+  },
+  {
+   "name": "beh-happy",
+   "look": "cozy",
+   "scale": 5.6,
+   "seed": 45,
+   "preroll": 1.6,
+   "duration": 0.4,
+   "script": [
+    [
+     0,
+     "happy"
+    ]
+   ]
+  },
+  {
+   "name": "beh-curious",
+   "look": "cozy",
+   "scale": 5.6,
+   "seed": 47,
+   "preroll": 2.2,
+   "duration": 0.4,
+   "script": [
+    [
+     0,
+     "curious"
+    ]
+   ]
+  },
+  {
+   "name": "trust",
+   "look": "cozy",
+   "scale": 4.8,
+   "seed": 55,
+   "preroll": 2,
+   "duration": 7,
+   "script": [
+    [
+     0,
+     "idle"
+    ]
+   ]
+  },
+  {
+   "name": "end",
+   "look": "cozy",
+   "scale": 4.8,
+   "seed": 31,
+   "preroll": 1,
+   "duration": 10,
+   "script": [
+    [
+     0,
+     "happy"
+    ],
+    [
+     3.4,
+     "idle"
+    ]
+   ],
+   "pokes": [
+    4.6
+   ]
+  },
+  {
+   "name": "drag",
+   "look": "cozy",
+   "scale": 4.8,
+   "seed": 61,
+   "preroll": 1,
+   "duration": 2.6,
+   "holds": [
+    [
+     0.45,
+     1.55
+    ]
+   ],
+   "script": [
+    [
+     0,
+     "idle"
+    ]
+   ]
+  },
+  {
+   "name": "st-sleep",
+   "look": "cozy",
+   "scale": 8,
+   "seed": 71,
+   "preroll": 12,
+   "duration": 2.6,
+   "script": [
+    [
+     0,
+     "sleeping"
+    ]
+   ]
+  },
+  {
+   "name": "st-look",
+   "look": "cozy",
+   "scale": 8,
+   "seed": 72,
+   "preroll": 2.5,
+   "duration": 2.6,
+   "script": [
+    [
+     0,
+     "watching"
+    ]
+   ]
+  },
+  {
+   "name": "st-work",
+   "look": "cozy",
+   "scale": 8,
+   "seed": 73,
+   "preroll": 2,
+   "duration": 2.6,
+   "script": [
+    [
+     0,
+     "working"
+    ]
+   ]
+  },
+  {
+   "name": "st-turn",
+   "look": "cozy",
+   "scale": 8,
+   "seed": 74,
+   "preroll": 0.2,
+   "duration": 2.6,
+   "script": [
+    [
+     0,
+     "yourTurn"
+    ]
+   ]
+  },
+  {
+   "name": "st-needs",
+   "look": "cozy",
+   "scale": 8,
+   "seed": 75,
+   "preroll": 0.2,
+   "duration": 2.6,
+   "script": [
+    [
+     0,
+     "needsYou"
+    ]
+   ]
+  }
+ ],
+ "faces": {
+  "look": "cozy",
+  "scale": 4
+ },
+ "bubbles": [
+  {
+   "name": "done",
+   "scale": 4,
+   "scheme": "light",
+   "before": [
+    [
+     "website",
+     "busy"
+    ],
+    [
+     "api",
+     "busy"
+    ],
+    [
+     "docs",
+     "idle",
+     "",
+     "cli",
+     "7200"
+    ]
+   ],
+   "after": [
+    [
+     "website",
+     "idle"
+    ],
+    [
+     "api",
+     "busy"
+    ],
+    [
+     "docs",
+     "idle",
+     "",
+     "cli",
+     "7200"
+    ]
+   ]
+  },
+  {
+   "name": "needs",
+   "scale": 4,
+   "scheme": "light",
+   "before": [
+    [
+     "website",
+     "idle",
+     "",
+     "claude-vscode",
+     "1500"
+    ],
+    [
+     "api",
+     "busy"
+    ],
+    [
+     "docs",
+     "idle",
+     "",
+     "cli",
+     "7200"
+    ]
+   ],
+   "after": [
+    [
+     "website",
+     "idle",
+     "",
+     "claude-vscode",
+     "1500"
+    ],
+    [
+     "api",
+     "waiting",
+     "Bash(npm test)"
+    ],
+    [
+     "docs",
+     "idle",
+     "",
+     "cli",
+     "7200"
+    ]
+   ]
+  }
+ ]
+}

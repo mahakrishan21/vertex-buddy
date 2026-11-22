@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=2400, height=2040" />
+    <title>Vertex Buddy film: four looks to choose from</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Hand"; src: local("Marker Felt"), local("MarkerFelt-Thin"), local("Chalkboard SE"); }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 2400px; height: 2040px; background: #111114; }
+      #root { position: absolute; inset: 0; background: #111114; color: #fff; font-family: "Inter", sans-serif; overflow: hidden; }
+      h1 { position: absolute; left: 52px; top: 50px; font-size: 42px; font-weight: 700; letter-spacing: -0.02em; }
+      .sub { position: absolute; left: 52px; top: 112px; font-size: 26px; color: rgba(255,255,255,.62); }
+      .rowx { position: absolute; left: 52px; right: 52px; height: 400px; }
+      .who { position: absolute; left: 0; top: 0; width: 370px; }
+      .who b { display: block; font-size: 92px; font-weight: 900; line-height: 1; color: #39F06A; }
+      .who h2 { font-size: 34px; font-weight: 700; margin: 20px 0 12px; letter-spacing: -0.02em; }
+      .who p { font-size: 25px; line-height: 1.4; color: rgba(255,255,255,.62); }
+      .f { position: absolute; top: 0; width: 620px; height: 349px; border-radius: 14px; overflow: hidden; }
+      .f1 { left: 408px; } .f2 { left: 1044px; } .f3 { left: 1680px; }
+      .f img { position: absolute; }
+      /* A. desktop story */
+      .desk { background: linear-gradient(140deg, #CFE3FF 0%, #E9DEFF 55%, #FFE7D6 100%); }
+      .mb { position: absolute; left: 0; right: 0; top: 0; height: 18px; background: rgba(255,255,255,.6); }
+      .mb i { position: absolute; top: 6px; height: 6px; border-radius: 3px; background: rgba(0,0,0,.35); }
+      .w { position: absolute; border-radius: 9px; background: #fff; box-shadow: 0 18px 40px -16px rgba(30,30,80,.45); overflow: hidden; }
+      .w.dk { background: #1E2029; }
+      .w .tb { height: 20px; border-bottom: 1px solid rgba(0,0,0,.08); font: 500 9px "JetBrains Mono", monospace; color: rgba(0,0,0,.45); padding: 5px 0 0 36px; }
+      .w.dk .tb { border-color: rgba(255,255,255,.08); color: rgba(255,255,255,.5); }
+      .w .tb::before { content: ""; position: absolute; left: 9px; top: 7px; width: 6px; height: 6px; border-radius: 50%; background: #bbb; box-shadow: 9px 0 #bbb, 18px 0 #bbb; }
+      .w u { display: block; height: 5px; border-radius: 3px; background: rgba(0,0,0,.12); margin: 8px 0 0 14px; }
+      .w.dk u { background: rgba(255,255,255,.16); }
+      .cap { position: absolute; left: 50%; bottom: 16px; transform: translateX(-50%); padding: 7px 16px; border-radius: 8px; background: rgba(18,18,22,.92); font-size: 15px; font-weight: 500; white-space: nowrap; }
+      /* B. toy studio */
+      .toy { font-family: "League Gothic", "Oswald", sans-serif; }
+      .toy .big { position: absolute; left: 22px; font-size: 200px; line-height: .86; letter-spacing: -0.01em; text-transform: uppercase; }
+      .toy .floor { position: absolute; left: 0; right: 0; bottom: 0; height: 110px; }
+      .toy .sh { position: absolute; width: 210px; height: 26px; border-radius: 50%; background: radial-gradient(ellipse, rgba(0,0,0,.35), rgba(0,0,0,0) 70%); }
+      .stk { position: absolute; padding: 6px 14px; border-radius: 30px; background: #fff; color: #111; font: 700 14px "Inter", sans-serif; letter-spacing: .08em; text-transform: uppercase; box-shadow: 0 6px 16px -6px rgba(0,0,0,.5); }
+      /* C. pixel arcade */
+      .arc { background: #07090C; font-family: "JetBrains Mono", monospace; color: #39F06A; image-rendering: pixelated; }
+      .arc::after { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(0deg, rgba(0,0,0,.34) 0 2px, transparent 2px 4px); pointer-events: none; }
+      .arc .hud { position: absolute; left: 18px; right: 18px; top: 14px; display: flex; justify-content: space-between; font-size: 13px; font-weight: 700; letter-spacing: .08em; }
+      .arc .ln { position: absolute; left: 22px; bottom: 26px; font-size: 22px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+      .arc .gnd { position: absolute; left: 0; right: 0; top: 262px; height: 4px; background: repeating-linear-gradient(90deg, #39F06A 0 10px, transparent 10px 16px); opacity: .7; }
+      .blk { position: absolute; display: flex; gap: 4px; } .blk i { width: 14px; height: 14px; background: #39F06A; } .blk i.o { background: rgba(57,240,106,.2); }
+      .box { position: absolute; padding: 8px 14px; border: 3px solid #FF5F87; color: #FF5F87; font-size: 18px; font-weight: 700; letter-spacing: .06em; background: rgba(255,95,135,.1); }
+      /* D. one light */
+      .ed { font-family: "Playfair Display", "EB Garamond", serif; }
+      .ed .g { position: absolute; inset: 0; background-image: linear-gradient(90deg, rgba(128,128,128,.14) 1px, transparent 1px); background-size: 77.5px 100%; }
+      .ed .k { position: absolute; left: 30px; top: 22px; font: 500 10px "JetBrains Mono", monospace; letter-spacing: .16em; text-transform: uppercase; opacity: .6; }
+      .ed .h { position: absolute; left: 30px; bottom: 28px; font-size: 62px; line-height: 1.02; letter-spacing: -0.02em; }
+      .ed .h em { font-style: italic; }
+      .ed .lt { position: absolute; border-radius: 50%; }
+      .foot { position: absolute; left: 52px; right: 52px; top: 1830px; border-top: 1px solid rgba(255,255,255,.14); padding-top: 34px; }
+      .foot b { position: absolute; left: 0; top: 30px; font-size: 92px; font-weight: 900; line-height: 1; color: #39F06A; }
+      .foot h2 { position: absolute; left: 100px; top: 44px; font-size: 34px; font-weight: 700; width: 280px; line-height: 1.1; }
+      .foot p { position: absolute; left: 408px; top: 44px; right: 0; font-size: 26px; line-height: 1.42; color: rgba(255,255,255,.66); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="1" data-width="2400" data-height="2040">
+      <h1>Vertex Buddy film: four new looks, none of them the films so far</h1>
+      <div class="sub">Each row shows the same three lines in a different visual world. Vertex in every frame is the real app's render. Pick one, or mix two.</div>
+
+      <div class="rowx" style="top:200px">
+        <div class="who"><b>A</b><h2>Desktop story</h2><p>One Mac desktop, at true size. Windows open, pile up and go full screen while Vertex lives in the corner. Feels like a real screen recording, with subtitles.</p></div>
+        <div class="f f1 desk"><div class="mb"><i style="left:12px;width:10px"></i><i style="left:34px;width:30px"></i><i style="left:74px;width:22px"></i><i style="right:14px;width:46px"></i></div>
+          <div class="w dk" style="left:60px;top:44px;width:420px;height:240px"><div class="tb">api</div><u style="width:120px"></u><u style="width:220px;background:#45D4E8"></u><u style="width:180px;margin-left:30px"></u><u style="width:240px;margin-left:30px"></u><u style="width:150px;margin-left:30px;background:#48D97F"></u><u style="width:200px"></u><u style="width:90px"></u></div>
+          <img src="assets/work.png" style="left:468px;top:176px;width:150px"><div class="cap">Claude is working.</div></div>
+        <div class="f f2 desk"><div class="mb"><i style="left:12px;width:10px"></i><i style="left:34px;width:30px"></i><i style="left:74px;width:22px"></i><i style="right:14px;width:46px"></i></div>
+          <div class="w dk" style="left:40px;top:40px;width:330px;height:200px"><div class="tb">api</div><u style="width:120px"></u><u style="width:200px"></u><u style="width:150px"></u></div>
+          <div class="w" style="left:150px;top:70px;width:330px;height:216px"><div class="tb">mail</div><u style="width:200px"></u><u style="width:260px"></u><u style="width:230px"></u><u style="width:120px"></u><u style="width:250px"></u><u style="width:180px"></u></div>
+          <img src="assets/bubble.png" style="left:398px;top:40px;width:214px"><img src="assets/needs.png" style="left:468px;top:176px;width:150px"><div class="cap">And then it needs you.</div></div>
+        <div class="f f3 desk"><div class="mb"><i style="left:12px;width:10px"></i><i style="left:34px;width:30px"></i><i style="left:74px;width:22px"></i><i style="right:14px;width:46px"></i></div>
+          <div class="w" style="left:36px;top:66px;width:300px;height:190px;opacity:.7"><div class="tb">mail</div><u style="width:200px"></u><u style="width:240px"></u></div>
+          <div class="w dk" style="left:90px;top:40px;width:400px;height:250px;box-shadow:0 0 0 3px #48D97F, 0 18px 40px -16px rgba(30,30,80,.5)"><div class="tb">api</div><u style="width:120px"></u><u style="width:220px;background:#45D4E8"></u><u style="width:180px;margin-left:30px"></u><u style="width:240px;margin-left:30px;background:#48D97F"></u><u style="width:150px;margin-left:30px"></u><u style="width:210px"></u></div>
+          <img src="assets/turn.png" style="left:468px;top:176px;width:150px"><div class="cap">Vertex keeps you in the loop.</div></div>
+      </div>
+
+      <div class="rowx" style="top:608px">
+        <div class="who"><b>B</b><h2>Toy studio</h2><p>Vertex as a collectible on a photo sweep: huge, glossy, lit like a product shoot. Giant poster type behind it, sticker labels, one bold colour per beat. Loud and fun.</p></div>
+        <div class="f f1 toy" style="background:linear-gradient(180deg,#2FD27A 0%,#8BF0B4 62%,#C9FBDD 100%)"><div class="big" style="top:34px;color:#0E7A40;font-size:170px">Working.</div><div class="floor" style="background:linear-gradient(180deg,rgba(255,255,255,0),rgba(255,255,255,.55))"></div><div class="sh" style="left:356px;top:306px"></div><img src="assets/work.png" style="left:296px;top:22px;width:340px"><div class="stk" style="left:26px;top:270px">Claude is working</div></div>
+        <div class="f f2 toy" style="background:linear-gradient(180deg,#FF4D7C 0%,#FF93AE 62%,#FFD3DE 100%)"><div class="big" style="top:20px;left:300px;color:#B3123F;font-size:160px">Needs<br>you.</div><div class="floor" style="background:linear-gradient(180deg,rgba(255,255,255,0),rgba(255,255,255,.5))"></div><div class="sh" style="left:60px;top:306px"></div><img src="assets/needs.png" style="left:-4px;top:22px;width:340px"><div class="stk" style="left:392px;top:270px">And then it needs you</div></div>
+        <div class="f f3 toy" style="background:linear-gradient(180deg,#FFD25A 0%,#FFE7A6 62%,#FFF6DC 100%)"><div class="big" style="top:14px;color:#B57A00;font-size:150px">In the loop.</div><div class="floor" style="background:linear-gradient(180deg,rgba(255,255,255,0),rgba(255,255,255,.55))"></div>
+          <img src="assets/c-cloud.png" style="left:6px;top:150px;width:200px"><img src="assets/c-pixel.png" style="left:146px;top:150px;width:200px"><img src="assets/c-robo.png" style="left:286px;top:150px;width:200px"><img src="assets/c-cozy.png" style="left:420px;top:150px;width:200px"><div class="stk" style="left:150px;top:306px">Vertex keeps you in the loop</div></div>
+      </div>
+
+      <div class="rowx" style="top:1016px">
+        <div class="who"><b>C</b><h2>Pixel arcade</h2><p>A retro game on a glowing screen, starring Pixel Vertex. Sessions are levels, a waiting session is an alarm, the click is "press start". Made for developers.</p></div>
+        <div class="f f1 arc"><div class="hud"><span>SESSION 03 / API</span><span>STATUS: WORKING</span></div><div class="gnd"></div><img src="assets/pixel-idle.png" style="left:60px;top:96px;width:196px"><div class="blk" style="left:300px;top:150px"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i class="o"></i><i class="o"></i><i class="o"></i><i class="o"></i><i class="o"></i></div><div style="position:absolute;left:300px;top:176px;font-size:13px;opacity:.8">CLAUDE &gt; writing code_</div><div class="ln">Claude is working.</div></div>
+        <div class="f f2 arc"><div class="hud" style="color:#FF5F87"><span>SESSION 03 / API</span><span>STATUS: WAITING</span></div><div class="gnd" style="background:repeating-linear-gradient(90deg,#FF5F87 0 10px,transparent 10px 16px)"></div><img src="assets/pixel-idle.png" style="left:60px;top:96px;width:196px"><div class="box" style="left:300px;top:128px">! IT NEEDS YOU</div><div style="position:absolute;left:300px;top:186px;font-size:13px;color:#FF5F87">Bash(npm test) &gt; allow? [Y/N]</div><div class="ln" style="color:#FF5F87">And then it needs you.</div></div>
+        <div class="f f3 arc"><div class="hud"><span>3 SESSIONS</span><span>YOU: IN THE LOOP</span></div><div class="gnd"></div><img src="assets/c-pixel.png" style="left:212px;top:92px;width:196px"><div style="position:absolute;left:0;right:0;top:52px;text-align:center;font-size:24px;font-weight:700;letter-spacing:.2em;color:#FFC83D">VERTEX BUDDY</div><div class="ln" style="left:0;right:0;text-align:center">Vertex keeps you in the loop.</div></div>
+      </div>
+
+      <div class="rowx" style="top:1424px">
+        <div class="who"><b>D</b><h2>One light</h2><p>Black, white, a large serif and a single status light. Almost nothing moves except the light changing colour and Vertex reacting. Quiet, confident, editorial.</p></div>
+        <div class="f f1 ed" style="background:#F3F1EA;color:#141414"><div class="g"></div><div class="k">01 · working</div><div class="lt" style="left:470px;top:92px;width:44px;height:44px;background:radial-gradient(circle,#7DF0A5,#28B862);box-shadow:0 0 50px 14px rgba(72,217,127,.55)"></div><img src="assets/work.png" style="left:420px;top:150px;width:210px"><div class="h">Claude is<br><em>working.</em></div></div>
+        <div class="f f2 ed" style="background:#0E0E10;color:#fff"><div class="g"></div><div class="k">02 · waiting</div><div class="lt" style="left:470px;top:92px;width:44px;height:44px;background:radial-gradient(circle,#FF9DB6,#FF3D72);box-shadow:0 0 60px 18px rgba(255,95,135,.6)"></div><img src="assets/needs.png" style="left:420px;top:150px;width:210px"><div class="h">And then it<br><em>needs you.</em></div></div>
+        <div class="f f3 ed" style="background:#F3F1EA;color:#141414"><div class="g"></div><div class="k">03 · vertex buddy</div><div class="lt" style="left:452px;top:74px;width:80px;height:80px;border:9px solid #28B862;box-shadow:0 0 40px 6px rgba(72,217,127,.45)"></div><img src="assets/turn.png" style="left:420px;top:150px;width:210px"><div class="h" style="font-size:54px">Vertex keeps you<br>in the <em>loop.</em></div></div>
+      </div>
+
+      <div class="foot"><b>E</b><h2>Real-looking video</h2><p>AI-generated footage that looks filmed: a real desk at night, a monitor glowing, a small robot toy beside the keyboard. There is no sample because it can't be made on this Mac as set up. It needs a Higgsfield or Runway account connected and costs credits per shot, and the generated robot would not match the real Vertex from shot to shot.</p></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = gsap.timeline({ paused: true });
+    </script>
+  </body>
+</html>

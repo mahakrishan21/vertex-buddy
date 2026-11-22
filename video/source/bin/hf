@@ -1,0 +1,7 @@
+#!/bin/bash
+# HyperFrames CLI, pinned in video/source/package.json, run with the project-local environment.
+set -e
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$HERE/env.sh"
+cd "$HERE/.."
+exec "$HERE/../node_modules/.bin/hyperframes" "$@"

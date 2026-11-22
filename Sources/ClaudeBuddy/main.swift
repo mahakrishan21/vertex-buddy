@@ -17,6 +17,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             return
         }
 
+        // `--film spec.json out/` writes the buddy as transparent frame sequences, for making videos.
+        if let i = args.firstIndex(of: "--film"), i + 2 < args.count {
+            Film.render(spec: URL(fileURLWithPath: args[i + 1]), to: URL(fileURLWithPath: args[i + 2]))
+            NSApp.terminate(nil)
+            return
+        }
+
         if args.contains("--status") {
             store.scan(quiet: true)
             print(store.report)

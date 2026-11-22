@@ -1,0 +1,25 @@
+# tools and caches (rebuildable)
+.home/
+source/node_modules/
+# generated HyperFrames projects (written by source/build/*.mjs)
+source/film/
+source/launch/
+source/launch2/
+source/launch3/
+source/launch4/
+source/launch5/
+source/options/.hyperframes/
+# generated video: the rendered films and the footage recorded from the app
+renders/*.mp4
+assets/footage/
+assets/footage-launch/
+assets/footage-launch2/
+# third-party stock video: download again from the sources in assets/stock/README.md
+assets/stock/mixkit/
+assets/stock/prepared/
+# review frames and logs
+docs/frames/
+docs/logs/
+.playwright-mcp/
+# the film builders live in a folder called build, which the app's rule would hide
+!source/build/

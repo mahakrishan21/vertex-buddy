@@ -1,0 +1,113 @@
+{
+ "film": "launch5",
+ "voice": "af_heart",
+ "speed": 1.02,
+ "engine": "Kokoro-82M (local, via hyperframes tts)",
+ "lines": [
+  {
+   "id": "n1",
+   "scene": "film",
+   "text": "Working with Claude Code, you start in the loop.",
+   "file": "assets/audio/voice/launch5/n1.wav",
+   "duration": 2.368
+  },
+  {
+   "id": "n2",
+   "scene": "film",
+   "text": "Then one session becomes five.",
+   "file": "assets/audio/voice/launch5/n2.wav",
+   "duration": 1.685
+  },
+  {
+   "id": "v2",
+   "scene": "film",
+   "text": "So you hand them off, and step away.",
+   "file": "assets/audio/voice/launch5/v2.wav",
+   "duration": 1.813
+  },
+  {
+   "id": "n4",
+   "scene": "film",
+   "text": "And one of them stops. It needs you.",
+   "file": "assets/audio/voice/launch5/n4.wav",
+   "duration": 2.005
+  },
+  {
+   "id": "v5",
+   "scene": "film",
+   "text": "Meet Vertex Buddy.",
+   "file": "assets/audio/voice/launch5/v5.wav",
+   "duration": 1.28
+  },
+  {
+   "id": "v6",
+   "scene": "film",
+   "text": "It floats above every app on your Mac, and watches them all.",
+   "file": "assets/audio/voice/launch5/v6.wav",
+   "duration": 3.115
+  },
+  {
+   "id": "x1",
+   "scene": "film",
+   "text": "Asleep when nothing's running.",
+   "file": "assets/audio/voice/launch5/x1.wav",
+   "duration": 1.557
+  },
+  {
+   "id": "x2",
+   "scene": "film",
+   "text": "Calm when sessions are open.",
+   "file": "assets/audio/voice/launch5/x2.wav",
+   "duration": 1.643
+  },
+  {
+   "id": "x3",
+   "scene": "film",
+   "text": "Busy when Claude's working.",
+   "file": "assets/audio/voice/launch5/x3.wav",
+   "duration": 1.451
+  },
+  {
+   "id": "x4",
+   "scene": "film",
+   "text": "Delighted when one finishes.",
+   "file": "assets/audio/voice/launch5/x4.wav",
+   "duration": 1.557
+  },
+  {
+   "id": "x5",
+   "scene": "film",
+   "text": "Unmissable when one needs you.",
+   "file": "assets/audio/voice/launch5/x5.wav",
+   "duration": 1.621
+  },
+  {
+   "id": "v8",
+   "scene": "film",
+   "text": "Hover for every session. Click, and you're back in.",
+   "file": "assets/audio/voice/launch5/v8.wav",
+   "duration": 2.709
+  },
+  {
+   "id": "v9",
+   "scene": "film",
+   "text": "Four characters. Nine behaviours. Twelve faces.",
+   "file": "assets/audio/voice/launch5/v9.wav",
+   "duration": 3.072
+  },
+  {
+   "id": "v10",
+   "scene": "film",
+   "text": "No hooks. No settings to change. Nothing leaves your Mac.",
+   "file": "assets/audio/voice/launch5/v10.wav",
+   "duration": 3.435
+  },
+  {
+   "id": "v11",
+   "scene": "film",
+   "text": "Claude does the work. Vertex keeps you in the loop.",
+   "file": "assets/audio/voice/launch5/v11.wav",
+   "duration": 2.645
+  }
+ ]
+}
